@@ -15,7 +15,7 @@ if not _G.FIRST_RUN_POPUP then
 ✨ WELCOME TO HERRY SCRIPT SYSTEM ✨
 
 🔑 TO GET ACCESS KEY:
-1️⃣ Go to HerryHacks Discord Server.
+1️⃣ Go to Official HerryHacks Discord Server.
 2️⃣ Find and open #get-key channel.
 
 📩 No Discord Server Link?
