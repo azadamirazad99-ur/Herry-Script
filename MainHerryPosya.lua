@@ -97,7 +97,7 @@ function LOAD_POSYA_FAST()
 end
 
 -- ---------------------------------------------------
--- 4. VIP DASHBOARD MENU (COMPACT & GAME-FRIENDLY)
+-- 4. SINGLE-LINE TITLE DASHBOARD (LANDSCAPE SAFE)
 -- ---------------------------------------------------
 function MAIN_MENU()
     local menu = gg.choice({
@@ -105,7 +105,7 @@ function MAIN_MENU()
         '🔥 Posya Russian Script [v4.0]',
         '🌐 Posya English Script [Coming Soon]',
         '❌ Exit Script'
-    }, nil, "👑 HERRY HACKS VIP v4.0 👑\nOwner: Herry | Status: Safe")
+    }, nil, "👑 HERRY HACKS VIP v4.0 👑")
 
     if menu == 1 then
         gg.alert("⚠️ Currently under development!")
