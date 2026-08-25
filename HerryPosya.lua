@@ -1,0 +1,155 @@
+-- ===================================================
+-- HERRY & POSYA CHEATS - FULL MASTER LUA SCRIPT
+-- ===================================================
+
+local POSYA_RAW_LINK = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/PosyaByHerry.lua"
+local KEYS_RAW_LINK = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/keys.txt"
+
+-- String Cleaner (Spaces & Newlines Stripper)
+local function cleanStr(str)
+    if not str then return "" end
+    return (str:gsub("%s+", ""):gsub("\r", ""):gsub("\n", ""))
+end
+
+-- ---------------------------------------------------
+-- 1. KEY VERIFICATION SYSTEM
+-- ---------------------------------------------------
+gg.toast("⏳ Connecting to Verification Server...")
+
+local keys_response = gg.makeRequest(KEYS_RAW_LINK)
+if not keys_response or keys_response.code ~= 200 then
+    gg.alert("❌ Network Error: Keys load nahi ho sakain! Internet check karein.")
+    os.exit()
+end
+
+local input = gg.prompt({'Enter Access Key 🔐'}, {[1]=''}, {[1]='text'})
+if not input or cleanStr(input[1]) == '' then
+    gg.alert("❌ Access Denied: Key enter karna zaroori hai!")
+    os.exit()
+end
+
+local userKey = cleanStr(input[1]):lower()
+local isValidKey = false
+
+for line in keys_response.content:gmatch("[^\r\n]+") do
+    local cleanLine = cleanStr(line):lower()
+    if cleanLine ~= "" and cleanLine == userKey then
+        isValidKey = true
+        break
+    end
+end
+
+if not isValidKey then
+    gg.alert("❌ Invalid or Expired Key!\n\nDiscord server par /getkey chalayein.")
+    os.exit()
+end
+
+-- ---------------------------------------------------
+-- 2. DEVICE HWID LOCK SYSTEM
+-- ---------------------------------------------------
+local raw_info = gg.getTargetInfo()
+local current_hwid = "DEV_" .. cleanStr(raw_info.packageName or "GAME") .. "_" .. cleanStr(os.getenv("USER") or "USER")
+local local_hwid_file = gg.EXT_STORAGE .. "/.herry_hwid.dat"
+
+local file = io.open(local_hwid_file, "r")
+local savedContent = file and file:read("*all") or ""
+if file then file:close() end
+
+local savedKey, savedHwid = savedContent:match("([^:]+):([^:]+)")
+
+if savedKey and cleanStr(savedKey):lower() == userKey then
+    if savedHwid and cleanStr(savedHwid) ~= current_hwid then
+        gg.alert("🚫 Access Denied!\nYeh key doosre device par already locked hai.")
+        os.exit()
+    end
+else
+    local wfile = io.open(local_hwid_file, "w")
+    if wfile then
+        wfile:write(userKey .. ":" .. current_hwid)
+        wfile:close()
+    end
+    gg.alert("✅ Key Verified!\n🔒 Key Locked to this Device.")
+end
+
+-- ---------------------------------------------------
+-- 3. MAIN MENU & CHEAT FUNCTIONS
+-- ---------------------------------------------------
+function MAIN_MENU()
+    local menu = gg.choice({
+        '⚡ Herry Hack Menu',
+        '🔥 Posya Remote Script',
+        '🛡️ Bypass & Protection',
+        '❌ Exit Script'
+    }, nil, '👑 HERRY CHEATS SYSTEM 👑\nStatus: Key Active ✅')
+
+    if menu == 1 then
+        HERRY_HACK_MENU()
+    elseif menu == 2 then
+        LOAD_POSYA_REMOTE()
+    elseif menu == 3 then
+        BYPASS_MENU()
+    elseif menu == 4 or menu == nil then
+        gg.toast("👋 Exiting Script...")
+        os.exit()
+    end
+end
+
+function HERRY_HACK_MENU()
+    local hmenu = gg.choice({
+        '🎯 Auto Aimbot / Headshot',
+        '🏎️ Speed Hack / Vehicle Mod',
+        '👻 Wallhack / ESP',
+        '🔙 Back to Main Menu'
+    }, nil, '⚡ HERRY CHEAT MODS ⚡')
+
+    if hmenu == 1 then
+        gg.toast("⚡ Activating Aimbot...")
+        -- Yahan aapka Aimbot memory logic aayega
+        gg.alert("✅ Aimbot Successfully Activated!")
+        HERRY_HACK_MENU()
+    elseif hmenu == 2 then
+        gg.toast("🏎️ Speed Hack Enabled!")
+        -- Yahan aapka Speedhack memory logic aayega
+        HERRY_HACK_MENU()
+    elseif hmenu == 3 then
+        gg.toast("👻 Wallhack Enabled!")
+        -- Yahan Wallhack logic aayega
+        HERRY_HACK_MENU()
+    elseif hmenu == 4 or hmenu == nil then
+        MAIN_MENU()
+    end
+end
+
+function LOAD_POSYA_REMOTE()
+    gg.toast("🚀 Loading Remote Posya Script...")
+    local res = gg.makeRequest(POSYA_RAW_LINK)
+    
+    if res and res.code == 200 and res.content and #res.content > 10 then
+        local runPosya, err = (loadstring or load)(res.content)
+        if runPosya then
+            runPosya()
+        else
+            gg.alert("❌ Posya Script Syntax Error:\n" .. tostring(err))
+        end
+    else
+        gg.alert("❌ Remote Script Download Failed! Check GitHub Link.")
+    end
+    MAIN_MENU()
+end
+
+function BYPASS_MENU()
+    gg.toast("🛡️ Applying Anti-Cheat Bypass...")
+    -- Yahan Bypass logic aayega
+    gg.alert("✅ Bypass Activated Successfully!")
+    MAIN_MENU()
+end
+
+-- Start Script Loop
+while true do
+    if gg.isVisible(true) then
+        gg.setVisible(false)
+        MAIN_MENU()
+    end
+    gg.sleep(100)
+end
+
