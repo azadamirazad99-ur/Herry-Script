@@ -1,3 +1,4 @@
+
 -- ===================================================
 -- 👑 HERRY HACKS - VIP DASHBOARD & CHEATS SYSTEM 👑
 -- ===================================================
@@ -89,24 +90,11 @@ else
 end
 
 -- ---------------------------------------------------
--- 3. VIP DASHBOARD MENU
+-- 3. VIP DASHBOARD MENU (FIXED GG DISPLAY MISTAKE)
 -- ---------------------------------------------------
 function MAIN_MENU()
-    local dashboard_title = [[
-▓████████████████████████████████████▓
-        👑 HERRY HACKS VIP DASHBOARD 👑
-▓████████████████████████████████████▓
-
-👤 Owner    : Herry
-📌 Version  : Latest (v4.0)
-🎮 Game     : Grand Mobile / RP
-🟢 Status   : Running / Safe ✅
-
-⚠️ NOTE:
-If you Buy this hack U got Scammed!
-Get Free hack In Our discord server.
-DM for getting This hack free: herry_escobarr
-──────────────────────────────────────]]
+    -- Sub-title shortened to fix GG UI rendering overflow
+    local dashboard_title = "👑 HERRY HACKS VIP DASHBOARD 👑\n👤 Owner: Herry | 📌 Version: v4.0\n🎮 Game: Grand Mobile / RP | 🟢 Status: Safe ✅"
 
     local menu = gg.choice({
         '⚡ Herry Hack Menu [In Dev]',
@@ -156,4 +144,3 @@ while true do
     end
     gg.sleep(100)
 end
-
