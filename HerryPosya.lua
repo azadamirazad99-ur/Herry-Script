@@ -1,11 +1,29 @@
+
 -- ===================================================
--- HERRY & POSYA CHEATS - FULL MASTER LUA SCRIPT
+-- 👑 HERRY HACKS - VIP DASHBOARD & CHEATS SYSTEM 👑
 -- ===================================================
 
 local POSYA_RAW_LINK = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/PosyaByHerry.lua"
-local KEYS_RAW_LINK = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/keys.txt"
+local KEYS_RAW_LINK = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/keys.txt?t=" .. os.time()
 
--- String Cleaner (Spaces & Newlines Stripper)
+-- Global flag so welcome popup shows ONLY ONCE
+if not _G.FIRST_RUN_POPUP then
+    _G.FIRST_RUN_POPUP = true
+    gg.alert([[
+░▒▓█ HERRY HACKS OFFICIAL █▓▒░
+
+✨ WELCOME TO HERRY SCRIPT SYSTEM ✨
+
+🔑 TO GET ACCESS KEY:
+1️⃣ Go to HerryHacks Discord Server.
+2️⃣ Find and open #get-key channel.
+
+📩 No Discord Server Link?
+DM Discord ID: herry_escobarr to get the invite link!
+]])
+end
+
+-- String Cleaner
 local function cleanStr(str)
     if not str then return "" end
     return (str:gsub("%s+", ""):gsub("\r", ""):gsub("\n", ""))
@@ -14,17 +32,17 @@ end
 -- ---------------------------------------------------
 -- 1. KEY VERIFICATION SYSTEM
 -- ---------------------------------------------------
-gg.toast("⏳ Connecting to Verification Server...")
+gg.toast("⚡ [HERRY HACKS] Connecting to Server...")
 
 local keys_response = gg.makeRequest(KEYS_RAW_LINK)
 if not keys_response or keys_response.code ~= 200 then
-    gg.alert("❌ Network Error: Keys load nahi ho sakain! Internet check karein.")
+    gg.alert("❌ Network Error: Server connection failed! Please check your internet.")
     os.exit()
 end
 
-local input = gg.prompt({'Enter Access Key 🔐'}, {[1]=''}, {[1]='text'})
+local input = gg.prompt({'🔑 Enter Your Access Key:'}, {[1]=''}, {[1]='text'})
 if not input or cleanStr(input[1]) == '' then
-    gg.alert("❌ Access Denied: Key enter karna zaroori hai!")
+    gg.alert("❌ Access Denied: Key input cannot be empty!")
     os.exit()
 end
 
@@ -40,7 +58,7 @@ for line in keys_response.content:gmatch("[^\r\n]+") do
 end
 
 if not isValidKey then
-    gg.alert("❌ Invalid or Expired Key!\n\nDiscord server par /getkey chalayein.")
+    gg.alert("❌ Invalid or Expired Key!\n\nGet a valid key from Discord (#get-key channel).")
     os.exit()
 end
 
@@ -59,7 +77,7 @@ local savedKey, savedHwid = savedContent:match("([^:]+):([^:]+)")
 
 if savedKey and cleanStr(savedKey):lower() == userKey then
     if savedHwid and cleanStr(savedHwid) ~= current_hwid then
-        gg.alert("🚫 Access Denied!\nYeh key doosre device par already locked hai.")
+        gg.alert("🚫 Access Denied!\nThis key is already locked to another device.")
         os.exit()
     end
 else
@@ -68,83 +86,70 @@ else
         wfile:write(userKey .. ":" .. current_hwid)
         wfile:close()
     end
-    gg.alert("✅ Key Verified!\n🔒 Key Locked to this Device.")
+    gg.toast("✅ Key Verified & HWID Locked!")
 end
 
 -- ---------------------------------------------------
--- 3. MAIN MENU & CHEAT FUNCTIONS
+-- 3. VIP DASHBOARD MENU
 -- ---------------------------------------------------
 function MAIN_MENU()
+    local dashboard_title = [[
+▓████████████████████████████████████▓
+        👑 HERRY HACKS VIP DASHBOARD 👑
+▓████████████████████████████████████▓
+
+👤 Owner    : Herry
+📌 Version  : Latest (v4.0)
+🎮 Game     : Grand Mobile / RP
+🟢 Status   : Running / Safe ✅
+
+⚠️ NOTE:
+If you Buy this hack U got Scammed!
+Get Free hack In Our discord server.
+DM for getting This hack free: herry_escobarr
+──────────────────────────────────────]]
+
     local menu = gg.choice({
-        '⚡ Herry Hack Menu',
-        '🔥 Posya Remote Script',
-        '🛡️ Bypass & Protection',
+        '⚡ Herry Hack Menu [In Dev]',
+        '🔥 Posya Russian Script [v4.0]',
+        '🌐 Posya English Script [Coming Soon]',
         '❌ Exit Script'
-    }, nil, '👑 HERRY CHEATS SYSTEM 👑\nStatus: Key Active ✅')
+    }, nil, dashboard_title)
 
     if menu == 1 then
-        HERRY_HACK_MENU()
+        gg.alert("⚠️ This hack is currently under development. Coming soon!")
+        MAIN_MENU()
     elseif menu == 2 then
-        LOAD_POSYA_REMOTE()
+        LOAD_POSYA_FAST()
     elseif menu == 3 then
-        BYPASS_MENU()
+        gg.alert("🚫 Not Available!\n\nPosya English Script is coming soon.")
+        MAIN_MENU()
     elseif menu == 4 or menu == nil then
-        gg.toast("👋 Exiting Script...")
+        gg.toast("👋 Exiting Herry Hacks...")
         os.exit()
     end
 end
 
-function HERRY_HACK_MENU()
-    local hmenu = gg.choice({
-        '🎯 Auto Aimbot / Headshot',
-        '🏎️ Speed Hack / Vehicle Mod',
-        '👻 Wallhack / ESP',
-        '🔙 Back to Main Menu'
-    }, nil, '⚡ HERRY CHEAT MODS ⚡')
-
-    if hmenu == 1 then
-        gg.toast("⚡ Activating Aimbot...")
-        -- Yahan aapka Aimbot memory logic aayega
-        gg.alert("✅ Aimbot Successfully Activated!")
-        HERRY_HACK_MENU()
-    elseif hmenu == 2 then
-        gg.toast("🏎️ Speed Hack Enabled!")
-        -- Yahan aapka Speedhack memory logic aayega
-        HERRY_HACK_MENU()
-    elseif hmenu == 3 then
-        gg.toast("👻 Wallhack Enabled!")
-        -- Yahan Wallhack logic aayega
-        HERRY_HACK_MENU()
-    elseif hmenu == 4 or hmenu == nil then
-        MAIN_MENU()
-    end
-end
-
-function LOAD_POSYA_REMOTE()
-    gg.toast("🚀 Loading Remote Posya Script...")
-    local res = gg.makeRequest(POSYA_RAW_LINK)
+-- ---------------------------------------------------
+-- FAST DIRECT EXECUTOR (NO DELAY)
+-- ---------------------------------------------------
+function LOAD_POSYA_FAST()
+    gg.toast("⚡ Instantly Executing Posya Script...")
+    local res = gg.makeRequest(POSYA_RAW_LINK .. "?t=" .. os.time())
     
     if res and res.code == 200 and res.content and #res.content > 10 then
         local runPosya, err = (loadstring or load)(res.content)
         if runPosya then
-            runPosya()
+            pcall(runPosya)
         else
             gg.alert("❌ Posya Script Syntax Error:\n" .. tostring(err))
         end
     else
-        gg.alert("❌ Remote Script Download Failed! Check GitHub Link.")
+        gg.alert("❌ Fast Load Failed! Check internet or GitHub link.")
     end
-    MAIN_MENU()
 end
 
-function BYPASS_MENU()
-    gg.toast("🛡️ Applying Anti-Cheat Bypass...")
-    -- Yahan Bypass logic aayega
-    gg.alert("✅ Bypass Activated Successfully!")
-    MAIN_MENU()
-end
-
--- Start Script Loop
+-- Main Script Loop
 while true do
     if gg.isVisible(true) then
         gg.setVisible(false)
@@ -152,4 +157,3 @@ while true do
     end
     gg.sleep(100)
 end
-
