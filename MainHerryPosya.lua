@@ -1,15 +1,9 @@
 -- ===================================================
--- 👑 HERRY HACKS - MAIN SCRIPT (GITHUB VERSION) 👑
+-- 👑 HERRY HACKS OFFICIAL - VIP SCRIPT SYSTEM 👑
 -- ===================================================
 
 local POSYA_RAW_LINK = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/PosyaByHerry.lua"
 local KEYS_RAW_LINK = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/keys.txt"
-
--- First Run Welcome Popup
-if not _G.FIRST_RUN_POPUP then
-    _G.FIRST_RUN_POPUP = true
-    gg.alert("👑 WELCOME TO HERRY HACKS VIP 👑\n\n🔑 Get key from Discord (#get-key).\n📩 DM: herry_escobarr")
-end
 
 -- String Helper
 local function cleanStr(str)
@@ -18,21 +12,41 @@ local function cleanStr(str)
 end
 
 -- ---------------------------------------------------
--- 1. KEY VERIFICATION SYSTEM
+-- 1. WELCOME POPUP (PRO UI DESIGN)
 -- ---------------------------------------------------
-gg.toast("⚡ Connecting to Key Server...")
+if not _G.FIRST_RUN_POPUP then
+    _G.FIRST_RUN_POPUP = true
+    gg.alert([[
+░▒▓█ HERRY HACKS OFFICIAL █▓▒░
+
+✨ WELCOME TO HERRY SCRIPT SYSTEM ✨
+
+🔑 How to Get Key?
+1️⃣ Go to HerryHacks Server.
+2️⃣ Find the Channel: #├📃│get-key
+
+❓ You don't have HerryHacks Server?
+📩 Don't worry! DM Owner on Discord:
+👉 herry_escobarr
+]])
+end
+
+-- ---------------------------------------------------
+-- 2. VIP KEY VERIFICATION SYSTEM
+-- ---------------------------------------------------
+gg.toast("⚡ [HERRY HACKS] Verifying Server Access...")
 
 local NOCACHE_KEY = os.time() .. "_" .. math.random(1000, 9999)
 local keys_response = gg.makeRequest(KEYS_RAW_LINK .. "?v=" .. NOCACHE_KEY)
 
 if not keys_response or keys_response.code ~= 200 then
-    gg.alert("❌ Network Error: Unable to fetch keys!")
+    gg.alert("❌ Network Error: Unable to connect to Key Server!")
     os.exit()
 end
 
-local input = gg.prompt({'🔑 Enter Access Key:'}, {[1]=''}, {[1]='text'})
+local input = gg.prompt({'🔑 Enter Your VIP Access Key:'}, {[1]=''}, {[1]='text'})
 if not input or cleanStr(input[1]) == '' then
-    gg.alert("❌ Access Denied: Empty Key!")
+    gg.alert("❌ Access Denied: Key cannot be empty!")
     os.exit()
 end
 
@@ -47,12 +61,12 @@ for line in keys_response.content:gmatch("[^\r\n]+") do
 end
 
 if not isValidKey then
-    gg.alert("❌ Invalid or Expired Key!")
+    gg.alert("❌ Invalid or Expired Key!\n\nGet a valid key from Discord (#├📃│get-key).")
     os.exit()
 end
 
 -- ---------------------------------------------------
--- 2. HWID LOCK SYSTEM
+-- 3. DEVICE HWID LOCK SYSTEM
 -- ---------------------------------------------------
 local raw_info = gg.getTargetInfo()
 local current_hwid = "DEV_" .. cleanStr(raw_info.packageName or "GAME") .. "_" .. cleanStr(os.getenv("USER") or "USER")
@@ -66,7 +80,7 @@ local savedKey, savedHwid = savedContent:match("([^:]+):([^:]+)")
 
 if savedKey and cleanStr(savedKey):lower() == userKey then
     if savedHwid and cleanStr(savedHwid) ~= current_hwid then
-        gg.alert("🚫 Access Denied! Device Mismatch.")
+        gg.alert("🚫 Access Denied!\nThis key is locked to another device.")
         os.exit()
     end
 else
@@ -75,14 +89,14 @@ else
         wfile:write(userKey .. ":" .. current_hwid)
         wfile:close()
     end
-    gg.toast("✅ Key Verified & HWID Locked!")
+    gg.toast("✅ Key Verified & Device HWID Locked!")
 end
 
 -- ---------------------------------------------------
--- 3. LOAD POSYA RUSSIAN SCRIPT
+-- 4. POSYA RUSSIAN EXECUTOR
 -- ---------------------------------------------------
 function LOAD_POSYA_FAST()
-    gg.toast("⚡ Fetching Posya Russian Script...")
+    gg.toast("🔥 Fetching Posya Russian Script...")
     local NOCACHE_LUA = os.time() .. "_" .. math.random(1000, 9999)
     local res = gg.makeRequest(POSYA_RAW_LINK .. "?v=" .. NOCACHE_LUA)
     
@@ -94,12 +108,12 @@ function LOAD_POSYA_FAST()
             gg.alert("❌ Syntax Error in Posya Script:\n" .. tostring(err))
         end
     else
-        gg.alert("❌ Failed to load Posya Script!")
+        gg.alert("❌ Failed to load Posya Script! Check connection.")
     end
 end
 
 -- ---------------------------------------------------
--- 4. VIP DASHBOARD MENU (LANDSCAPE FIX)
+-- 5. VIP DASHBOARD MENU (CLEAN & LANDSCAPE SAFE)
 -- ---------------------------------------------------
 function MAIN_MENU()
     local options = {
@@ -109,23 +123,23 @@ function MAIN_MENU()
         '❌ Exit Script'
     }
 
-    -- Short title prevents game mode overflow
-    local menu = gg.choice(options, nil, "👑 HERRY HACKS VIP v4.0 👑")
+    local menu = gg.choice(options, nil, "👑 HERRY HACKS VIP DASHBOARD v4.0 👑")
 
     if menu == 1 then
-        gg.alert("⚠️ Currently under development!")
+        gg.alert("⚠️ Herry Hack Menu is currently under development!")
         MAIN_MENU()
     elseif menu == 2 then
         LOAD_POSYA_FAST()
     elseif menu == 3 then
-        gg.alert("🚫 English Script coming soon!")
+        gg.alert("🚫 Posya English Script is coming soon.")
         MAIN_MENU()
     elseif menu == 4 or menu == nil then
-        gg.toast("👋 Exiting...")
+        gg.toast("👋 Exiting Herry Hacks...")
         os.exit()
     end
 end
 
+-- Main Loop
 while true do
     if gg.isVisible(true) then
         gg.setVisible(false)
