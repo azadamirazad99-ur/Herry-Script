@@ -5,14 +5,14 @@
 local POSYA_RAW_LINK = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/PosyaByHerry.lua"
 local KEYS_RAW_LINK = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/keys.txt"
 
--- String Helper
+-- Helper String Cleaner
 local function cleanStr(str)
     if not str then return "" end
     return (str:gsub("%s+", ""):gsub("\r", ""):gsub("\n", ""))
 end
 
 -- ---------------------------------------------------
--- 1. WELCOME POPUP (PRO UI DESIGN)
+-- 1. WELCOME POPUP
 -- ---------------------------------------------------
 if not _G.FIRST_RUN_POPUP then
     _G.FIRST_RUN_POPUP = true
@@ -25,16 +25,15 @@ if not _G.FIRST_RUN_POPUP then
 1️⃣ Go to HerryHacks Server.
 2️⃣ Find the Channel: #├📃│get-key
 
-❓ You don't have HerryHacks Server?
-📩 Don't worry! DM Owner on Discord:
-👉 herry_escobarr
+❓ Don't have HerryHacks Server?
+📩 DM Owner on Discord: herry_escobarr
 ]])
 end
 
 -- ---------------------------------------------------
 -- 2. VIP KEY VERIFICATION SYSTEM
 -- ---------------------------------------------------
-gg.toast("⚡ [HERRY HACKS] Verifying Server Access...")
+gg.toast("⚡ [HERRY HACKS] Verifying Access...")
 
 local NOCACHE_KEY = os.time() .. "_" .. math.random(1000, 9999)
 local keys_response = gg.makeRequest(KEYS_RAW_LINK .. "?v=" .. NOCACHE_KEY)
@@ -61,7 +60,7 @@ for line in keys_response.content:gmatch("[^\r\n]+") do
 end
 
 if not isValidKey then
-    gg.alert("❌ Invalid or Expired Key!\n\nGet a valid key from Discord (#├📃│get-key).")
+    gg.alert("❌ Invalid or Expired Key!\n\nGet a key from Discord (#├📃│get-key).")
     os.exit()
 end
 
@@ -93,7 +92,7 @@ else
 end
 
 -- ---------------------------------------------------
--- 4. POSYA RUSSIAN EXECUTOR
+-- 4. POSYA RUSSIAN SCRIPT EXECUTOR
 -- ---------------------------------------------------
 function LOAD_POSYA_FAST()
     gg.toast("🔥 Fetching Posya Russian Script...")
@@ -108,38 +107,53 @@ function LOAD_POSYA_FAST()
             gg.alert("❌ Syntax Error in Posya Script:\n" .. tostring(err))
         end
     else
-        gg.alert("❌ Failed to load Posya Script! Check connection.")
+        gg.alert("❌ Failed to load Posya Script! Check internet.")
     end
 end
 
 -- ---------------------------------------------------
--- 5. VIP DASHBOARD MENU (CLEAN & LANDSCAPE SAFE)
+-- 5. PRO VIP DASHBOARD MENU
 -- ---------------------------------------------------
 function MAIN_MENU()
+    local dashboard_banner = [[
+▓██████████████████████████████████████▓
+        👑 HERRY HACKS OFFICIAL VIP 👑
+▓██████████████████████████████████████▓
+
+👤 Owner       : Herry
+⚙️ Script Type : Grand Mobile GG Script
+🟢 Status      : Running / Safe ✅
+
+⚠️ IMPORTANT NOTICE:
+If you paid for this script, you got scammed! 
+This hack is 100% FREE!
+📩 Get Free Access: DM herry_escobarr
+────────────────────────────────────────]]
+
     local options = {
-        '⚡ Herry Hack Menu [In Dev]',
-        '🔥 Posya Russian Script [v4.0]',
-        '🌐 Posya English Script [Coming Soon]',
+        '⚡ Herry-Script (Coming Soon 🔜)',
+        '🔥 Posya-Russian [v4.0]',
+        '🌐 Posya-English [Coming Soon 🔜]',
         '❌ Exit Script'
     }
 
-    local menu = gg.choice(options, nil, "👑 HERRY HACKS VIP DASHBOARD v4.0 👑")
+    local menu = gg.choice(options, nil, dashboard_banner)
 
     if menu == 1 then
-        gg.alert("⚠️ Herry Hack Menu is currently under development!")
+        gg.alert("🚀 Herry-Script is under heavy development!\nStay tuned in Discord for release.")
         MAIN_MENU()
     elseif menu == 2 then
         LOAD_POSYA_FAST()
     elseif menu == 3 then
-        gg.alert("🚫 Posya English Script is coming soon.")
+        gg.alert("🌐 Posya-English Version is Coming Soon! 🔜")
         MAIN_MENU()
     elseif menu == 4 or menu == nil then
-        gg.toast("👋 Exiting Herry Hacks...")
+        gg.toast("👋 Thank you for using Herry Hacks VIP!")
         os.exit()
     end
 end
 
--- Main Loop
+-- Main Script Loop
 while true do
     if gg.isVisible(true) then
         gg.setVisible(false)
@@ -147,4 +161,3 @@ while true do
     end
     gg.sleep(100)
 end
-
