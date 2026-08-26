@@ -1,3 +1,4 @@
+
 -- ===================================================
 -- 👑 HERRY HACKS OFFICIAL - VIP SCRIPT SYSTEM 👑
 -- ===================================================
@@ -112,43 +113,37 @@ function LOAD_POSYA_FAST()
 end
 
 -- ---------------------------------------------------
--- 5. PRO VIP DASHBOARD MENU
+-- 5. PRO VIP DASHBOARD MENU (SCREEN FIT FIX)
 -- ---------------------------------------------------
 function MAIN_MENU()
+    -- Compact, clean text layout designed specifically to fit mobile landscape screen without scrolling
     local dashboard_banner = [[
-▓██████████████████████████████████████▓
-        👑 HERRY HACKS OFFICIAL VIP 👑
-▓██████████████████████████████████████▓
+👑 HERRY HACKS VIP v4.0 👑
+👤 Owner: Herry | 🎮 Game: Grand Mobile
+🟢 Status: Running / Safe ✅
 
-👤 Owner       : Herry
-⚙️ Script Type : Grand Mobile GG Script
-🟢 Status      : Running / Safe ✅
-
-⚠️ IMPORTANT NOTICE:
-If you paid for this script, you got scammed! 
-This hack is 100% FREE!
-📩 Get Free Access: DM herry_escobarr
-────────────────────────────────────────]]
+⚠️ NOTE: If you paid for this script, you got scammed! This hack is 100% FREE!
+📩 Free Access / DM: herry_escobarr]]
 
     local options = {
-        '⚡ Herry-Script (Coming Soon 🔜)',
+        '⚡ Herry-Script [Coming Soon]',
         '🔥 Posya-Russian [v4.0]',
-        '🌐 Posya-English [Coming Soon 🔜]',
+        '🌐 Posya-English [Coming Soon]',
         '❌ Exit Script'
     }
 
     local menu = gg.choice(options, nil, dashboard_banner)
 
     if menu == 1 then
-        gg.alert("🚀 Herry-Script is under heavy development!\nStay tuned in Discord for release.")
+        gg.alert("🚀 Herry-Script is under heavy development!\nStay tuned in Discord.")
         MAIN_MENU()
     elseif menu == 2 then
         LOAD_POSYA_FAST()
     elseif menu == 3 then
-        gg.alert("🌐 Posya-English Version is Coming Soon! 🔜")
+        gg.alert("🌐 Posya-English Version is Coming Soon!")
         MAIN_MENU()
     elseif menu == 4 or menu == nil then
-        gg.toast("👋 Thank you for using Herry Hacks VIP!")
+        gg.toast("👋 Exiting Herry Hacks...")
         os.exit()
     end
 end
