@@ -1,9 +1,15 @@
 -- ===================================================
--- 👑 HERRY HACKS - VIP DASHBOARD & CHEATS SYSTEM 👑
+-- 👑 HERRY HACKS - MAIN SCRIPT (GITHUB VERSION) 👑
 -- ===================================================
 
 local POSYA_RAW_LINK = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/PosyaByHerry.lua"
 local KEYS_RAW_LINK = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/keys.txt"
+
+-- First Run Welcome Popup
+if not _G.FIRST_RUN_POPUP then
+    _G.FIRST_RUN_POPUP = true
+    gg.alert("👑 WELCOME TO HERRY HACKS VIP 👑\n\n🔑 Get key from Discord (#get-key).\n📩 DM: herry_escobarr")
+end
 
 -- String Helper
 local function cleanStr(str)
@@ -14,19 +20,19 @@ end
 -- ---------------------------------------------------
 -- 1. KEY VERIFICATION SYSTEM
 -- ---------------------------------------------------
-gg.toast("⚡ [HERRY HACKS] Connecting to Server...")
+gg.toast("⚡ Connecting to Key Server...")
 
 local NOCACHE_KEY = os.time() .. "_" .. math.random(1000, 9999)
 local keys_response = gg.makeRequest(KEYS_RAW_LINK .. "?v=" .. NOCACHE_KEY)
 
 if not keys_response or keys_response.code ~= 200 then
-    gg.alert("❌ Network Error: Server connection failed!")
+    gg.alert("❌ Network Error: Unable to fetch keys!")
     os.exit()
 end
 
-local input = gg.prompt({'🔑 Enter Your Access Key:'}, {[1]=''}, {[1]='text'})
+local input = gg.prompt({'🔑 Enter Access Key:'}, {[1]=''}, {[1]='text'})
 if not input or cleanStr(input[1]) == '' then
-    gg.alert("❌ Access Denied: Key input cannot be empty!")
+    gg.alert("❌ Access Denied: Empty Key!")
     os.exit()
 end
 
@@ -41,12 +47,12 @@ for line in keys_response.content:gmatch("[^\r\n]+") do
 end
 
 if not isValidKey then
-    gg.alert("❌ Invalid or Expired Key!\nGet key from Discord (#get-key).")
+    gg.alert("❌ Invalid or Expired Key!")
     os.exit()
 end
 
 -- ---------------------------------------------------
--- 2. DEVICE HWID LOCK SYSTEM
+-- 2. HWID LOCK SYSTEM
 -- ---------------------------------------------------
 local raw_info = gg.getTargetInfo()
 local current_hwid = "DEV_" .. cleanStr(raw_info.packageName or "GAME") .. "_" .. cleanStr(os.getenv("USER") or "USER")
@@ -60,7 +66,7 @@ local savedKey, savedHwid = savedContent:match("([^:]+):([^:]+)")
 
 if savedKey and cleanStr(savedKey):lower() == userKey then
     if savedHwid and cleanStr(savedHwid) ~= current_hwid then
-        gg.alert("🚫 Access Denied! Key locked to another device.")
+        gg.alert("🚫 Access Denied! Device Mismatch.")
         os.exit()
     end
 else
@@ -73,15 +79,27 @@ else
 end
 
 -- ---------------------------------------------------
--- 3. POSYA CHEATS EXECUTOR
+-- 3. LOAD POSYA RUSSIAN SCRIPT
 -- ---------------------------------------------------
 function LOAD_POSYA_FAST()
-    gg.toast("🔥 Executing Posya Cheats...")
-    -- Yahan aapka Posya Cheats ka poora main hacking logic chalega
+    gg.toast("⚡ Fetching Posya Russian Script...")
+    local NOCACHE_LUA = os.time() .. "_" .. math.random(1000, 9999)
+    local res = gg.makeRequest(POSYA_RAW_LINK .. "?v=" .. NOCACHE_LUA)
+    
+    if res and res.code == 200 and res.content and #res.content > 10 then
+        local runPosya, err = (loadstring or load)(res.content)
+        if runPosya then
+            pcall(runPosya)
+        else
+            gg.alert("❌ Syntax Error in Posya Script:\n" .. tostring(err))
+        end
+    else
+        gg.alert("❌ Failed to load Posya Script!")
+    end
 end
 
 -- ---------------------------------------------------
--- 4. VIP DASHBOARD MENU (GAME LANDSCAPE SAFE)
+-- 4. VIP DASHBOARD MENU (LANDSCAPE FIX)
 -- ---------------------------------------------------
 function MAIN_MENU()
     local options = {
@@ -91,7 +109,7 @@ function MAIN_MENU()
         '❌ Exit Script'
     }
 
-    -- Title ko safe 1-line banaya hai taaki game mode mein options cut na ho
+    -- Short title prevents game mode overflow
     local menu = gg.choice(options, nil, "👑 HERRY HACKS VIP v4.0 👑")
 
     if menu == 1 then
@@ -100,15 +118,14 @@ function MAIN_MENU()
     elseif menu == 2 then
         LOAD_POSYA_FAST()
     elseif menu == 3 then
-        gg.alert("🚫 Posya English Script is coming soon.")
+        gg.alert("🚫 English Script coming soon!")
         MAIN_MENU()
     elseif menu == 4 or menu == nil then
-        gg.toast("👋 Exiting Herry Hacks...")
+        gg.toast("👋 Exiting...")
         os.exit()
     end
 end
 
--- Main Loop
 while true do
     if gg.isVisible(true) then
         gg.setVisible(false)
@@ -116,3 +133,4 @@ while true do
     end
     gg.sleep(100)
 end
+
