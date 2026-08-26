@@ -1,10 +1,12 @@
-
 -- ===================================================
--- 👑 HERRY HACKS OFFICIAL - VIP SCRIPT SYSTEM 👑
+-- 👑 HERRY HACKS OFFICIAL - FAST VIP SCRIPT SYSTEM 👑
 -- ===================================================
 
 local POSYA_RAW_LINK = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/PosyaByHerry.lua"
 local KEYS_RAW_LINK = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/keys.txt"
+
+-- Memory Cache for Super Fast Reloads
+_G.POSYA_CACHE = _G.POSYA_CACHE or nil
 
 -- Helper String Cleaner
 local function cleanStr(str)
@@ -32,12 +34,13 @@ if not _G.FIRST_RUN_POPUP then
 end
 
 -- ---------------------------------------------------
--- 2. VIP KEY VERIFICATION SYSTEM
+-- 2. VIP KEY VERIFICATION SYSTEM (OPTIMIZED)
 -- ---------------------------------------------------
 gg.toast("⚡ [HERRY HACKS] Verifying Access...")
 
-local NOCACHE_KEY = os.time() .. "_" .. math.random(1000, 9999)
-local keys_response = gg.makeRequest(KEYS_RAW_LINK .. "?v=" .. NOCACHE_KEY)
+local keys_response = gg.makeRequest(KEYS_RAW_LINK, {
+    ['User-Agent'] = 'Mozilla/5.0 (Linux; Android 10)'
+})
 
 if not keys_response or keys_response.code ~= 200 then
     gg.alert("❌ Network Error: Unable to connect to Key Server!")
@@ -93,14 +96,24 @@ else
 end
 
 -- ---------------------------------------------------
--- 4. POSYA RUSSIAN SCRIPT EXECUTOR
+-- 4. ULTRA-FAST POSYA RUSSIAN EXECUTOR
 -- ---------------------------------------------------
 function LOAD_POSYA_FAST()
-    gg.toast("🔥 Fetching Posya Russian Script...")
-    local NOCACHE_LUA = os.time() .. "_" .. math.random(1000, 9999)
-    local res = gg.makeRequest(POSYA_RAW_LINK .. "?v=" .. NOCACHE_LUA)
+    -- Sub-second execution using cached memory if available
+    if _G.POSYA_CACHE then
+        gg.toast("⚡ Launching Posya Instantly...")
+        local runPosya = (loadstring or load)(_G.POSYA_CACHE)
+        if runPosya then pcall(runPosya) return end
+    end
+
+    gg.toast("🔥 Fast Fetching Posya Russian Script...")
+    
+    local res = gg.makeRequest(POSYA_RAW_LINK, {
+        ['User-Agent'] = 'Mozilla/5.0 (Linux; Android 10)'
+    })
     
     if res and res.code == 200 and res.content and #res.content > 10 then
+        _G.POSYA_CACHE = res.content -- Store script in RAM for zero-delay reloads
         local runPosya, err = (loadstring or load)(res.content)
         if runPosya then
             pcall(runPosya)
@@ -108,15 +121,14 @@ function LOAD_POSYA_FAST()
             gg.alert("❌ Syntax Error in Posya Script:\n" .. tostring(err))
         end
     else
-        gg.alert("❌ Failed to load Posya Script! Check internet.")
+        gg.alert("❌ Connection Delay! Please re-try.")
     end
 end
 
 -- ---------------------------------------------------
--- 5. PRO VIP DASHBOARD MENU (SCREEN FIT FIX)
+-- 5. VIP DASHBOARD MENU (CLEAN & FAST)
 -- ---------------------------------------------------
 function MAIN_MENU()
-    -- Compact, clean text layout designed specifically to fit mobile landscape screen without scrolling
     local dashboard_banner = [[
 👑 HERRY HACKS VIP v4.0 👑
 👤 Owner: Herry | 🎮 Game: Grand Mobile
@@ -156,3 +168,4 @@ while true do
     end
     gg.sleep(100)
 end
+
