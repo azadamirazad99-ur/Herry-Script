@@ -1,12 +1,10 @@
 -- ===================================================
--- 👑 HERRY HACKS OFFICIAL - FAST VIP SCRIPT SYSTEM 👑
+-- 👑 HERRY HACKS OFFICIAL - LOADER (HerryPosya.lua) 👑
 -- ===================================================
 
--- 🌐 GitHub Links Updated (Direct Repo File)
-local POSYA_RAW_LINK = "https://raw.githubusercontent.com/azadamirazad99-ur/HerryBot-v4/main/PosyaByHerry.lua"
+local POSYA_RAW_LINK = "https://raw.githubusercontent.com/azadamirazad99-ur/Herry-Script/main/MainHerryPosya.lua"
 local KEYS_RAW_LINK = "https://raw.githubusercontent.com/azadamirazad99-ur/HerryBot-v4/main/keys.txt"
 
--- 🔒 Master Secret Protection Key (Sirf Aapke Liye)
 local SECRET_OWNER_KEY = "HERRY_SECRET_PROTECT_2026_VIP"
 
 local function cleanStr(str)
@@ -14,9 +12,7 @@ local function cleanStr(str)
     return (str:gsub("%s+", ""):gsub("\r", ""):gsub("\n", ""))
 end
 
--- ---------------------------------------------------
 -- 1. WELCOME POPUP
--- ---------------------------------------------------
 if not _G.FIRST_RUN_POPUP then
     _G.FIRST_RUN_POPUP = true
     gg.alert([[
@@ -33,9 +29,7 @@ if not _G.FIRST_RUN_POPUP then
 ]])
 end
 
--- ---------------------------------------------------
 -- 2. VIP KEY VERIFICATION SYSTEM
--- ---------------------------------------------------
 gg.toast("⚡ [HERRY HACKS] Verifying Access...")
 
 local input = gg.prompt({'🔑 Enter Your VIP Access Key:'}, {[1]=''}, {[1]='text'})
@@ -46,7 +40,6 @@ end
 
 local userKey = cleanStr(input[1])
 
--- Secret Owner Bypass Check
 if userKey == SECRET_OWNER_KEY then
     gg.toast("👑 Master Owner Key Activated!")
 else
@@ -60,18 +53,28 @@ else
     end
 
     local isValidKey = false
-    local currentTimestamp = os.time() * 1000
+    local currentSec = os.time()
+    local currentMs = currentSec * 1000
 
     for line in keys_response.content:gmatch("[^\r\n]+") do
         local cleanedLine = cleanStr(line)
         local kName, kExpiry = line:match("([^|]+)|([^|]+)")
-        
+
         if kName then
             if cleanStr(kName):lower() == userKey:lower() then
                 local expTime = tonumber(cleanStr(kExpiry))
-                if expTime and expTime < currentTimestamp then
-                    gg.alert("❌ Key Has Expired!\nPlease get a new key from Discord.")
-                    os.exit()
+                if expTime then
+                    local isExpired = false
+                    if expTime > 1000000000000 then
+                        if expTime < currentMs then isExpired = true end
+                    else
+                        if expTime < currentSec then isExpired = true end
+                    end
+
+                    if isExpired then
+                        gg.alert("❌ Key Has Expired!\nPlease get a new key from Discord.")
+                        os.exit()
+                    end
                 end
                 isValidKey = true
                 break
@@ -90,7 +93,6 @@ else
     end
 end
 
--- Dashboard Banner Alert
 gg.alert([[
 👑 HERRY HACKS VIP v4.0 👑
 👤 Owner: Herry | 🎮 Game: Grand Mobile
@@ -100,13 +102,10 @@ gg.alert([[
 📩 Free Access / DM: herry_escobarr
 ]])
 
--- ---------------------------------------------------
--- 3. ALWAYS FETCH LIVE POSYA-RUSSIAN SCRIPT
--- ---------------------------------------------------
+-- 3. AUTO FETCH MAIN SCRIPT (EVERY TIME LATEST)
 function LOAD_POSYA_FAST()
-    gg.toast("🔥 Loading Posya-Russian Script...")
+    gg.toast("🔥 Loading Latest Posya Script...")
 
-    -- Bypass GitHub CDN Cache to force live updates
     local live_link = POSYA_RAW_LINK .. "?v=" .. os.time()
     local res = gg.makeRequest(live_link, {
         ['User-Agent'] = 'Mozilla/5.0 (Linux; Android 10)'
@@ -124,9 +123,7 @@ function LOAD_POSYA_FAST()
     end
 end
 
--- ---------------------------------------------------
--- 4. MAIN MENU CONTROL (PERSISTENT LOOP)
--- ---------------------------------------------------
+-- 4. MAIN MENU
 function MAIN_MENU()
     local options = {
         '⚡ Herry-Script [Coming Soon]',
@@ -137,7 +134,6 @@ function MAIN_MENU()
 
     local menu = gg.choice(options, nil, "👑 HERRY HACKS VIP CONTROL")
 
-    -- Outside-click handler
     if menu == nil then
         gg.toast("🙈 Menu Hidden! Click GG Icon to Re-open.")
         return
