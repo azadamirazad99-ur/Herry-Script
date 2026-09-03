@@ -2,13 +2,13 @@
 -- 👑 HERRY HACKS OFFICIAL - FAST VIP SCRIPT SYSTEM 👑
 -- ===================================================
 
-local POSYA_RAW_LINK = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/PosyaByHerry.lua"
-local KEYS_RAW_LINK = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/keys.txt"
+-- 🌐 GitHub Links Updated (Direct Repo File)
+local POSYA_RAW_LINK = "https://raw.githubusercontent.com/azadamirazad99-ur/HerryBot-v4/main/PosyaByHerry.lua"
+local KEYS_RAW_LINK = "https://raw.githubusercontent.com/azadamirazad99-ur/HerryBot-v4/main/keys.txt"
 
--- Memory Cache for Super Fast Reloads
-_G.POSYA_CACHE = _G.POSYA_CACHE or nil
+-- 🔒 Master Secret Protection Key (Sirf Aapke Liye)
+local SECRET_OWNER_KEY = "HERRY_SECRET_PROTECT_2026_VIP"
 
--- Helper String Cleaner
 local function cleanStr(str)
     if not str then return "" end
     return (str:gsub("%s+", ""):gsub("\r", ""):gsub("\n", ""))
@@ -38,81 +38,59 @@ end
 -- ---------------------------------------------------
 gg.toast("⚡ [HERRY HACKS] Verifying Access...")
 
-local keys_response = gg.makeRequest(KEYS_RAW_LINK, {
-    ['User-Agent'] = 'Mozilla/5.0 (Linux; Android 10)'
-})
-
-if not keys_response or keys_response.code ~= 200 then
-    gg.alert("❌ Network Error: Unable to connect to Key Server!")
-    os.exit()
-end
-
 local input = gg.prompt({'🔑 Enter Your VIP Access Key:'}, {[1]=''}, {[1]='text'})
 if not input or cleanStr(input[1]) == '' then
     gg.alert("❌ Access Denied: Key cannot be empty!")
     os.exit()
 end
 
-local userKey = cleanStr(input[1]):lower()
-local isValidKey = false
-local currentTimestamp = os.time() * 1000
+local userKey = cleanStr(input[1])
 
-for line in keys_response.content:gmatch("[^\r\n]+") do
-    local cleanedLine = cleanStr(line)
-    
-    local kName, kExpiry = line:match("([^|]+)|([^|]+)")
-    
-    if kName then
-        if cleanStr(kName):lower() == userKey then
-            local expTime = tonumber(cleanStr(kExpiry))
-            if expTime and expTime < currentTimestamp then
-                gg.alert("❌ Key Has Expired!\nPlease get a new key from Discord.")
-                os.exit()
-            end
-            isValidKey = true
-            break
-        end
-    else
-        if cleanedLine:lower() == userKey then
-            isValidKey = true
-            break
-        end
-    end
-end
+-- Secret Owner Bypass Check
+if userKey == SECRET_OWNER_KEY then
+    gg.toast("👑 Master Owner Key Activated!")
+else
+    local keys_response = gg.makeRequest(KEYS_RAW_LINK, {
+        ['User-Agent'] = 'Mozilla/5.0 (Linux; Android 10)'
+    })
 
-if not isValidKey then
-    gg.alert("❌ Invalid or Expired Key!\n\nGet a key from Discord (#├📃│get-key).")
-    os.exit()
-end
-
--- ---------------------------------------------------
--- 3. DEVICE HWID LOCK SYSTEM
--- ---------------------------------------------------
-local raw_info = gg.getTargetInfo()
-local current_hwid = "DEV_" .. cleanStr(raw_info.packageName or "GAME") .. "_" .. cleanStr(os.getenv("USER") or "USER")
-local local_hwid_file = gg.EXT_STORAGE .. "/.herry_hwid.dat"
-
-local file = io.open(local_hwid_file, "r")
-local savedContent = file and file:read("*all") or ""
-if file then file:close() end
-
-local savedKey, savedHwid = savedContent:match("([^:]+):([^:]+)")
-
-if savedKey and cleanStr(savedKey):lower() == userKey then
-    if savedHwid and cleanStr(savedHwid) ~= current_hwid then
-        gg.alert("🚫 Access Denied!\nThis key is locked to another device.")
+    if not keys_response or keys_response.code ~= 200 then
+        gg.alert("❌ Network Error: Unable to connect to Key Server!")
         os.exit()
     end
-else
-    local wfile = io.open(local_hwid_file, "w")
-    if wfile then
-        wfile:write(userKey .. ":" .. current_hwid)
-        wfile:close()
+
+    local isValidKey = false
+    local currentTimestamp = os.time() * 1000
+
+    for line in keys_response.content:gmatch("[^\r\n]+") do
+        local cleanedLine = cleanStr(line)
+        local kName, kExpiry = line:match("([^|]+)|([^|]+)")
+        
+        if kName then
+            if cleanStr(kName):lower() == userKey:lower() then
+                local expTime = tonumber(cleanStr(kExpiry))
+                if expTime and expTime < currentTimestamp then
+                    gg.alert("❌ Key Has Expired!\nPlease get a new key from Discord.")
+                    os.exit()
+                end
+                isValidKey = true
+                break
+            end
+        else
+            if cleanedLine:lower() == userKey:lower() then
+                isValidKey = true
+                break
+            end
+        end
     end
-    gg.toast("✅ Key Verified & Device HWID Locked!")
+
+    if not isValidKey then
+        gg.alert("❌ Invalid or Expired Key!\n\nGet a key from Discord (#├📃│get-key).")
+        os.exit()
+    end
 end
 
--- Banner Alert Popup
+-- Dashboard Banner Alert
 gg.alert([[
 👑 HERRY HACKS VIP v4.0 👑
 👤 Owner: Herry | 🎮 Game: Grand Mobile
@@ -123,23 +101,18 @@ gg.alert([[
 ]])
 
 -- ---------------------------------------------------
--- 4. ULTRA-FAST POSYA RUSSIAN EXECUTOR
+-- 3. ALWAYS FETCH LIVE POSYA-RUSSIAN SCRIPT
 -- ---------------------------------------------------
 function LOAD_POSYA_FAST()
-    if _G.POSYA_CACHE then
-        gg.toast("⚡ Launching Posya Instantly...")
-        local runPosya = (loadstring or load)(_G.POSYA_CACHE)
-        if runPosya then pcall(runPosya) return end
-    end
+    gg.toast("🔥 Loading Posya-Russian Script...")
 
-    gg.toast("🔥 Fast Fetching Posya Russian Script...")
-
-    local res = gg.makeRequest(POSYA_RAW_LINK, {
+    -- Bypass GitHub CDN Cache to force live updates
+    local live_link = POSYA_RAW_LINK .. "?v=" .. os.time()
+    local res = gg.makeRequest(live_link, {
         ['User-Agent'] = 'Mozilla/5.0 (Linux; Android 10)'
     })
 
     if res and res.code == 200 and res.content and #res.content > 10 then
-        _G.POSYA_CACHE = res.content
         local runPosya, err = (loadstring or load)(res.content)
         if runPosya then
             pcall(runPosya)
@@ -152,7 +125,7 @@ function LOAD_POSYA_FAST()
 end
 
 -- ---------------------------------------------------
--- 5. VIP DASHBOARD MENU (EXACT OLD OPTIONS RESTORED)
+-- 4. MAIN MENU CONTROL (PERSISTENT LOOP)
 -- ---------------------------------------------------
 function MAIN_MENU()
     local options = {
@@ -164,7 +137,7 @@ function MAIN_MENU()
 
     local menu = gg.choice(options, nil, "👑 HERRY HACKS VIP CONTROL")
 
-    -- Outside-click handling (script exit hone se rokta hai)
+    -- Outside-click handler
     if menu == nil then
         gg.toast("🙈 Menu Hidden! Click GG Icon to Re-open.")
         return
@@ -182,7 +155,6 @@ function MAIN_MENU()
     end
 end
 
--- Main Script Loop
 while true do
     if gg.isVisible(true) then
         gg.setVisible(false)
