@@ -34,7 +34,7 @@ if not _G.FIRST_RUN_POPUP then
 end
 
 -- ---------------------------------------------------
--- 2. VIP KEY VERIFICATION SYSTEM (OPTIMIZED)
+-- 2. VIP KEY VERIFICATION SYSTEM
 -- ---------------------------------------------------
 gg.toast("⚡ [HERRY HACKS] Verifying Access...")
 
@@ -55,11 +55,28 @@ end
 
 local userKey = cleanStr(input[1]):lower()
 local isValidKey = false
+local currentTimestamp = os.time() * 1000
 
 for line in keys_response.content:gmatch("[^\r\n]+") do
-    if cleanStr(line):lower() == userKey then
-        isValidKey = true
-        break
+    local cleanedLine = cleanStr(line)
+    
+    local kName, kExpiry = line:match("([^|]+)|([^|]+)")
+    
+    if kName then
+        if cleanStr(kName):lower() == userKey then
+            local expTime = tonumber(cleanStr(kExpiry))
+            if expTime and expTime < currentTimestamp then
+                gg.alert("❌ Key Has Expired!\nPlease get a new key from Discord.")
+                os.exit()
+            end
+            isValidKey = true
+            break
+        end
+    else
+        if cleanedLine:lower() == userKey then
+            isValidKey = true
+            break
+        end
     end
 end
 
@@ -95,11 +112,20 @@ else
     gg.toast("✅ Key Verified & Device HWID Locked!")
 end
 
+-- Banner Alert Popup
+gg.alert([[
+👑 HERRY HACKS VIP v4.0 👑
+👤 Owner: Herry | 🎮 Game: Grand Mobile
+🟢 Status: Running / Safe ✅
+
+⚠️ NOTE: If you paid for this script, you got scammed! This hack is 100% FREE!
+📩 Free Access / DM: herry_escobarr
+]])
+
 -- ---------------------------------------------------
 -- 4. ULTRA-FAST POSYA RUSSIAN EXECUTOR
 -- ---------------------------------------------------
 function LOAD_POSYA_FAST()
-    -- Sub-second execution using cached memory if available
     if _G.POSYA_CACHE then
         gg.toast("⚡ Launching Posya Instantly...")
         local runPosya = (loadstring or load)(_G.POSYA_CACHE)
@@ -107,13 +133,13 @@ function LOAD_POSYA_FAST()
     end
 
     gg.toast("🔥 Fast Fetching Posya Russian Script...")
-    
+
     local res = gg.makeRequest(POSYA_RAW_LINK, {
         ['User-Agent'] = 'Mozilla/5.0 (Linux; Android 10)'
     })
-    
+
     if res and res.code == 200 and res.content and #res.content > 10 then
-        _G.POSYA_CACHE = res.content -- Store script in RAM for zero-delay reloads
+        _G.POSYA_CACHE = res.content
         local runPosya, err = (loadstring or load)(res.content)
         if runPosya then
             pcall(runPosya)
@@ -126,17 +152,9 @@ function LOAD_POSYA_FAST()
 end
 
 -- ---------------------------------------------------
--- 5. VIP DASHBOARD MENU (CLEAN & FAST)
+-- 5. VIP DASHBOARD MENU (EXACT OLD OPTIONS RESTORED)
 -- ---------------------------------------------------
 function MAIN_MENU()
-    local dashboard_banner = [[
-👑 HERRY HACKS VIP v4.0 👑
-👤 Owner: Herry | 🎮 Game: Grand Mobile
-🟢 Status: Running / Safe ✅
-
-⚠️ NOTE: If you paid for this script, you got scammed! This hack is 100% FREE!
-📩 Free Access / DM: herry_escobarr]]
-
     local options = {
         '⚡ Herry-Script [Coming Soon]',
         '🔥 Posya-Russian [v4.0]',
@@ -144,17 +162,21 @@ function MAIN_MENU()
         '❌ Exit Script'
     }
 
-    local menu = gg.choice(options, nil, dashboard_banner)
+    local menu = gg.choice(options, nil, "👑 HERRY HACKS VIP CONTROL")
+
+    -- Outside-click handling (script exit hone se rokta hai)
+    if menu == nil then
+        gg.toast("🙈 Menu Hidden! Click GG Icon to Re-open.")
+        return
+    end
 
     if menu == 1 then
         gg.alert("🚀 Herry-Script is under heavy development!\nStay tuned in Discord.")
-        MAIN_MENU()
     elseif menu == 2 then
         LOAD_POSYA_FAST()
     elseif menu == 3 then
         gg.alert("🌐 Posya-English Version is Coming Soon!")
-        MAIN_MENU()
-    elseif menu == 4 or menu == nil then
+    elseif menu == 4 then
         gg.toast("👋 Exiting Herry Hacks...")
         os.exit()
     end
@@ -168,4 +190,3 @@ while true do
     end
     gg.sleep(100)
 end
-
