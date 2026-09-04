@@ -2,7 +2,7 @@
 -- 👑 HERRY HACKS OFFICIAL - LOADER (HerryPosya.lua) 👑
 -- ===================================================
 
-local POSYA_RAW_LINK = "https://raw.githubusercontent.com/azadamirazad99-ur/Herry-Script/main/MainHerryPosya.lua"
+local POSYA_RAW_LINK = ""
 local KEYS_RAW_LINK = "https://github.com/urdushahzaib111-ctrl/HerryBot-v4/blob/main/keys.txt"
 
 local SECRET_OWNER_KEY = "HERRY_SECRET_PROTECT_2026_VIP"
