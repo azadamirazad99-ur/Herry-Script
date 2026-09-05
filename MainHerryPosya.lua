@@ -1,9 +1,10 @@
 -- ===================================================
--- 👑 HERRY HACKS OFFICIAL - LOADER (HerryPosya.lua) 👑
+-- 👑 HERRY HACKS OFFICIAL - VIP MAIN LOADER 👑
 -- ===================================================
 
-local POSYA_RAW_LINK = "https://github.com/urdushahzaib111-ctrl/HerryBot-v4/blob/main/PosyaByHerry.lua"
-local KEYS_RAW_LINK = "https://github.com/urdushahzaib111-ctrl/HerryBot-v4/blob/main/keys.txt"
+-- Live Repo Link for Posya-Russian Script
+local POSYA_RUSSIAN_RAW = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/Posyabyherry.lua"
+local KEYS_RAW_LINK = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/keys.txt"
 
 local SECRET_OWNER_KEY = "HERRY_SECRET_PROTECT_2026_VIP"
 
@@ -12,7 +13,9 @@ local function cleanStr(str)
     return (str:gsub("%s+", ""):gsub("\r", ""):gsub("\n", ""))
 end
 
+-- ---------------------------------------------------
 -- 1. WELCOME POPUP
+-- ---------------------------------------------------
 if not _G.FIRST_RUN_POPUP then
     _G.FIRST_RUN_POPUP = true
     gg.alert([[
@@ -29,7 +32,9 @@ if not _G.FIRST_RUN_POPUP then
 ]])
 end
 
+-- ---------------------------------------------------
 -- 2. VIP KEY VERIFICATION SYSTEM
+-- ---------------------------------------------------
 gg.toast("⚡ [HERRY HACKS] Verifying Access...")
 
 local input = gg.prompt({'🔑 Enter Your VIP Access Key:'}, {[1]=''}, {[1]='text'})
@@ -38,16 +43,14 @@ if not input or cleanStr(input[1]) == '' then
     os.exit()
 end
 
-local userKey = cleanStr(input[1])
+local userKey = cleanStr(input[1]):lower()
 
-if userKey == SECRET_OWNER_KEY then
+if userKey == SECRET_OWNER_KEY:lower() then
     gg.toast("👑 Master Owner Key Activated!")
 else
-    local keys_response = gg.makeRequest(KEYS_RAW_LINK, {
-        ['User-Agent'] = 'Mozilla/5.0 (Linux; Android 10)'
-    })
+    local keys_response = gg.makeRequest(KEYS_RAW_LINK .. "?v=" .. os.time())
 
-    if not keys_response or keys_response.code ~= 200 then
+    if not keys_response or keys_response.code ~= 200 or not keys_response.content then
         gg.alert("❌ Network Error: Unable to connect to Key Server!")
         os.exit()
     end
@@ -58,19 +61,13 @@ else
 
     for line in keys_response.content:gmatch("[^\r\n]+") do
         local cleanedLine = cleanStr(line)
-        local kName, kExpiry = line:match("([^|]+)|([^|]+)")
+        if cleanedLine ~= "" then
+            local kName, kExpiry = cleanedLine:match("([^|]+)|?([^|]*)")
 
-        if kName then
-            if cleanStr(kName):lower() == userKey:lower() then
+            if kName and cleanStr(kName):lower() == userKey then
                 local expTime = tonumber(cleanStr(kExpiry))
                 if expTime then
-                    local isExpired = false
-                    if expTime > 1000000000000 then
-                        if expTime < currentMs then isExpired = true end
-                    else
-                        if expTime < currentSec then isExpired = true end
-                    end
-
+                    local isExpired = (expTime > 1000000000000) and (expTime < currentMs) or (expTime < currentSec)
                     if isExpired then
                         gg.alert("❌ Key Has Expired!\nPlease get a new key from Discord.")
                         os.exit()
@@ -78,9 +75,7 @@ else
                 end
                 isValidKey = true
                 break
-            end
-        else
-            if cleanedLine:lower() == userKey:lower() then
+            elseif cleanedLine:lower() == userKey then
                 isValidKey = true
                 break
             end
@@ -93,6 +88,7 @@ else
     end
 end
 
+-- Dashboard Banner
 gg.alert([[
 👑 HERRY HACKS VIP v4.0 👑
 👤 Owner: Herry | 🎮 Game: Grand Mobile
@@ -102,14 +98,15 @@ gg.alert([[
 📩 Free Access / DM: herry_escobarr
 ]])
 
--- 3. AUTO FETCH MAIN SCRIPT (EVERY TIME LATEST)
-function LOAD_POSYA_FAST()
-    gg.toast("🔥 Loading Latest Posya Script...")
+-- ---------------------------------------------------
+-- 3. FETCH POSYA RUSSIAN SCRIPT
+-- ---------------------------------------------------
+function LOAD_POSYA_RUSSIAN()
+    gg.toast("🔥 Loading Posya-Russian Script...")
 
-    local live_link = POSYA_RAW_LINK .. "?v=" .. os.time()
-    local res = gg.makeRequest(live_link, {
-        ['User-Agent'] = 'Mozilla/5.0 (Linux; Android 10)'
-    })
+    -- Live fetch with cache-bypass
+    local live_link = POSYA_RUSSIAN_RAW .. "?v=" .. os.time()
+    local res = gg.makeRequest(live_link)
 
     if res and res.code == 200 and res.content and #res.content > 10 then
         local runPosya, err = (loadstring or load)(res.content)
@@ -119,11 +116,13 @@ function LOAD_POSYA_FAST()
             gg.alert("❌ Syntax Error in Posya Script:\n" .. tostring(err))
         end
     else
-        gg.alert("❌ Connection Delay! Please re-try.")
+        gg.alert("❌ Connection Error! Unable to fetch Posyabyherry.lua from GitHub.")
     end
 end
 
--- 4. MAIN MENU
+-- ---------------------------------------------------
+-- 4. MAIN MENU CONTROL
+-- ---------------------------------------------------
 function MAIN_MENU()
     local options = {
         '⚡ Herry-Script [Coming Soon]',
@@ -142,7 +141,7 @@ function MAIN_MENU()
     if menu == 1 then
         gg.alert("🚀 Herry-Script is under heavy development!\nStay tuned in Discord.")
     elseif menu == 2 then
-        LOAD_POSYA_FAST()
+        LOAD_POSYA_RUSSIAN()
     elseif menu == 3 then
         gg.alert("🌐 Posya-English Version is Coming Soon!")
     elseif menu == 4 then
