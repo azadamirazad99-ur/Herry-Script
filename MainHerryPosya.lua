@@ -3,7 +3,7 @@
 -- ===================================================
 
 -- Live Repo Link for Posya-Russian Script
-local POSYA_RUSSIAN_RAW = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/Posyabyherry.lua"
+local POSYA_RUSSIAN_RAW = "https://github.com/urdushahzaib111-ctrl/HerryBot-v4/blob/main/PosyaByHerry.lua"
 local KEYS_RAW_LINK = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/keys.txt"
 
 local SECRET_OWNER_KEY = "HERRY_SECRET_PROTECT_2026_VIP"
