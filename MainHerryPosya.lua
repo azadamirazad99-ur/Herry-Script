@@ -102,7 +102,7 @@ gg.alert([[
 ]])
 
 -- ---------------------------------------------------
--- 3. FETCH POSYA-RUSSIAN SCRIPT (SAFE LOAD)
+-- 3. FETCH POSYA-RUSSIAN SCRIPT (FIXED EXIT CRASH)
 -- ---------------------------------------------------
 function LOAD_POSYA_RUSSIAN()
     gg.toast("🔥 Loading Posya-Russian Script...")
@@ -115,15 +115,21 @@ function LOAD_POSYA_RUSSIAN()
     if res and res.code == 200 and res.content and #res.content > 10 then
         -- Catch HTML Error Page if GitHub returns 404/Redirect text
         if res.content:find("<!DOCTYPE html>") or res.content:find("<html>") then
-            gg.alert("❌ RAW Link Error!\nFile name on GitHub must be 'PosyaByHerry.lua' (Check exact spelling).")
+            gg.alert("❌ RAW Link Error!\nFile name on GitHub must be 'PosyaByHerry.lua'.")
             return
         end
 
         local runPosya, err = (loadstring or load)(res.content)
         if runPosya then
             local success, runErr = pcall(runPosya)
-            if not success then
-                gg.alert("❌ Runtime Error in PosyaByHerry.lua:\n" .. tostring(runErr))
+            if not success and runErr then
+                local errStr = tostring(runErr)
+                -- Catch and handle os.exit safely without popping a error dialog
+                if not errStr:find("os.exit") and not errStr:find("called os.exit") then
+                    gg.alert("❌ Runtime Error in PosyaByHerry.lua:\n" .. errStr)
+                else
+                    os.exit()
+                end
             end
         else
             gg.alert("❌ Syntax Error in PosyaByHerry.lua:\n" .. tostring(err))
