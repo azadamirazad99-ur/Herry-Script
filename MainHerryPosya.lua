@@ -1,10 +1,10 @@
 -- ===================================================
--- 👑 HERRY HACKS OFFICIAL - VIP MAIN LOADER 👑
+-- 👑 HERRY HACKS OFFICIAL - MAIN MASTER SCRIPT 👑
 -- ===================================================
 
--- Live Repo Link for Posya-Russian Script
-local POSYA_RUSSIAN_RAW = "https://github.com/urdushahzaib111-ctrl/HerryBot-v4/blob/main/PosyaByHerry.lua"
+-- RAW GitHub Links (Direct raw links for instant execution)
 local KEYS_RAW_LINK = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/keys.txt"
+local POSYA_RUSSIAN_RAW = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/PosyaByHerry.lua"
 
 local SECRET_OWNER_KEY = "HERRY_SECRET_PROTECT_2026_VIP"
 
@@ -25,7 +25,7 @@ if not _G.FIRST_RUN_POPUP then
 
 🔑 How to Get Key?
 1️⃣ Go to HerryHacks Server.
-2️⃣ Find the Channel: #├📃│get-key
+2️⃣ Find Channel: #├📃│get-key
 
 ❓ Don't have HerryHacks Server?
 📩 DM Owner on Discord: herry_escobarr
@@ -45,10 +45,13 @@ end
 
 local userKey = cleanStr(input[1]):lower()
 
+-- Secret Owner Key Bypass
 if userKey == SECRET_OWNER_KEY:lower() then
     gg.toast("👑 Master Owner Key Activated!")
 else
-    local keys_response = gg.makeRequest(KEYS_RAW_LINK .. "?v=" .. os.time())
+    local keys_response = gg.makeRequest(KEYS_RAW_LINK .. "?v=" .. os.time(), {
+        ['User-Agent'] = 'Mozilla/5.0 (Linux; Android 10)'
+    })
 
     if not keys_response or keys_response.code ~= 200 or not keys_response.content then
         gg.alert("❌ Network Error: Unable to connect to Key Server!")
@@ -99,24 +102,34 @@ gg.alert([[
 ]])
 
 -- ---------------------------------------------------
--- 3. FETCH POSYA RUSSIAN SCRIPT
+-- 3. FETCH POSYA-RUSSIAN SCRIPT (SAFE LOAD)
 -- ---------------------------------------------------
 function LOAD_POSYA_RUSSIAN()
     gg.toast("🔥 Loading Posya-Russian Script...")
 
-    -- Live fetch with cache-bypass
-    local live_link = POSYA_RUSSIAN_RAW .. "?v=" .. os.time()
-    local res = gg.makeRequest(live_link)
+    local live_url = POSYA_RUSSIAN_RAW .. "?v=" .. os.time()
+    local res = gg.makeRequest(live_url, {
+        ['User-Agent'] = 'Mozilla/5.0 (Linux; Android 10)'
+    })
 
     if res and res.code == 200 and res.content and #res.content > 10 then
+        -- Catch HTML Error Page if GitHub returns 404/Redirect text
+        if res.content:find("<!DOCTYPE html>") or res.content:find("<html>") then
+            gg.alert("❌ RAW Link Error!\nFile name on GitHub must be 'PosyaByHerry.lua' (Check exact spelling).")
+            return
+        end
+
         local runPosya, err = (loadstring or load)(res.content)
         if runPosya then
-            pcall(runPosya)
+            local success, runErr = pcall(runPosya)
+            if not success then
+                gg.alert("❌ Runtime Error in PosyaByHerry.lua:\n" .. tostring(runErr))
+            end
         else
-            gg.alert("❌ Syntax Error in Posya Script:\n" .. tostring(err))
+            gg.alert("❌ Syntax Error in PosyaByHerry.lua:\n" .. tostring(err))
         end
     else
-        gg.alert("❌ Connection Error! Unable to fetch Posyabyherry.lua from GitHub.")
+        gg.alert("❌ Failed to download PosyaByHerry.lua from GitHub!")
     end
 end
 
