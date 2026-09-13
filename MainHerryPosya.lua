@@ -2,7 +2,7 @@
 -- 👑 HERRY HACKS OFFICIAL - MAIN MASTER SCRIPT 👑
 -- ===================================================
 
--- RAW GitHub Links (Corrected Repository Links)
+-- RAW GitHub Links
 local KEYS_RAW_LINK = "https://raw.githubusercontent.com/azadamirazad99-ur/Herry-Script/main/keys.txt"
 local POSYA_RUSSIAN_RAW = "https://raw.githubusercontent.com/azadamirazad99-ur/HerryBot-v4/main/PosyaByHerry.lua"
 
@@ -49,12 +49,15 @@ local userKey = cleanStr(input[1]):lower()
 if userKey == SECRET_OWNER_KEY:lower() then
     gg.toast("👑 Master Owner Key Activated!")
 else
+    -- Added Request Headers to prevent blocking by ISP/Sandbox
     local keys_response = gg.makeRequest(KEYS_RAW_LINK .. "?v=" .. os.time(), {
-        ['User-Agent'] = 'Mozilla/5.0 (Linux; Android 10)'
+        ['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+        ['Accept'] = '*/*'
     })
 
-    if not keys_response or (keys_response.code ~= 200 and keys_response.status ~= 200) or not keys_response.content then
-        gg.alert("❌ Network Error: Unable to connect to Key Server!")
+    -- Check if content exists regardless of strict response code (bypasses sandbox network bugs)
+    if not keys_response or not keys_response.content or #keys_response.content == 0 then
+        gg.alert("❌ Network Error: Unable to connect to Key Server!\n\nCheck Virtual Space Internet Permissions or Private DNS.")
         os.exit()
     end
 
@@ -103,18 +106,18 @@ gg.alert([[
 ]])
 
 -- ---------------------------------------------------
--- 3. FETCH POSYA-RUSSIAN SCRIPT (FIXED LINK & LOADING)
+-- 3. FETCH POSYA-RUSSIAN SCRIPT
 -- ---------------------------------------------------
 function LOAD_POSYA_RUSSIAN()
     gg.toast("🔥 Loading Posya-Russian Script...")
 
     local live_url = POSYA_RUSSIAN_RAW .. "?v=" .. os.time()
     local res = gg.makeRequest(live_url, {
-        ['User-Agent'] = 'Mozilla/5.0 (Linux; Android 10)'
+        ['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+        ['Accept'] = '*/*'
     })
 
-    if res and (res.code == 200 or res.status == 200) and res.content and #res.content > 10 then
-        -- Catch HTML Error Page if Repository is Private or Link gives 404
+    if res and res.content and #res.content > 10 then
         if res.content:find("<!DOCTYPE html>") or res.content:find("<html>") or res.content:find("404: Not Found") then
             gg.alert("❌ RAW Link Error!\n\nMake sure 'HerryBot-v4' Repository is PUBLIC and file 'PosyaByHerry.lua' exists.")
             return
@@ -135,7 +138,7 @@ function LOAD_POSYA_RUSSIAN()
             gg.alert("❌ Syntax Error in PosyaByHerry.lua:\n" .. tostring(err))
         end
     else
-        gg.alert("❌ Failed to download PosyaByHerry.lua from GitHub!")
+        gg.alert("❌ Failed to download PosyaByHerry.lua from GitHub!\nCheck Virtual Space Internet access.")
     end
 end
 
