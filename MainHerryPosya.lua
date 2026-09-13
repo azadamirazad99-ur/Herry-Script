@@ -2,9 +2,9 @@
 -- 👑 HERRY HACKS OFFICIAL - MAIN MASTER SCRIPT 👑
 -- ===================================================
 
--- RAW GitHub Links (Direct raw links for instant execution)
-local KEYS_RAW_LINK = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/keys.txt"
-local POSYA_RUSSIAN_RAW = "https://raw.githubusercontent.com/urdushahzaib111-ctrl/HerryBot-v4/main/PosyaByHerry.lua"
+-- RAW GitHub Links (Updated Repository)
+local KEYS_RAW_LINK = "https://raw.githubusercontent.com/azadamirazad99-ur/Herry-Script/main/keys.txt"
+local POSYA_RUSSIAN_RAW = "https://raw.githubusercontent.com/azadamirazad99-ur/Herry-Script/main/PosyaByHerry.lua"
 
 local SECRET_OWNER_KEY = "HERRY_SECRET_PROTECT_2026_VIP"
 
@@ -25,10 +25,10 @@ if not _G.FIRST_RUN_POPUP then
 
 🔑 How to Get Key?
 1️⃣ Go to HerryHacks Server.
-2️⃣ Find Channel: #├📃│get-key
+2️⃣ Find The Channel: #├📃│get-key
 
 ❓ Don't have HerryHacks Server?
-📩 DM Owner on Discord: herry_escobarr
+📩 DM Owner On Discord: herry_escobarr
 ]])
 end
 
@@ -53,7 +53,7 @@ else
         ['User-Agent'] = 'Mozilla/5.0 (Linux; Android 10)'
     })
 
-    if not keys_response or keys_response.code ~= 200 or not keys_response.content then
+    if not keys_response or (keys_response.code ~= 200 and keys_response.status ~= 200) or not keys_response.content then
         gg.alert("❌ Network Error: Unable to connect to Key Server!")
         os.exit()
     end
@@ -65,7 +65,8 @@ else
     for line in keys_response.content:gmatch("[^\r\n]+") do
         local cleanedLine = cleanStr(line)
         if cleanedLine ~= "" then
-            local kName, kExpiry = cleanedLine:match("([^|]+)|?([^|]*)")
+            -- Parse lines in KEY|EXPIRY|USERID format
+            local kName, kExpiry = line:match("^([^|]+)|?([^|]*)")
 
             if kName and cleanStr(kName):lower() == userKey then
                 local expTime = tonumber(cleanStr(kExpiry))
@@ -86,7 +87,7 @@ else
     end
 
     if not isValidKey then
-        gg.alert("❌ Invalid or Expired Key!\n\nGet a key from Discord (#├📃│get-key).")
+        gg.alert("❌ Invalid or Expired Key!\n\nGet a new key from Discord using /getkey command.")
         os.exit()
     end
 end
@@ -102,7 +103,7 @@ gg.alert([[
 ]])
 
 -- ---------------------------------------------------
--- 3. FETCH POSYA-RUSSIAN SCRIPT (FIXED EXIT CRASH)
+-- 3. FETCH POSYA-RUSSIAN SCRIPT
 -- ---------------------------------------------------
 function LOAD_POSYA_RUSSIAN()
     gg.toast("🔥 Loading Posya-Russian Script...")
@@ -112,10 +113,9 @@ function LOAD_POSYA_RUSSIAN()
         ['User-Agent'] = 'Mozilla/5.0 (Linux; Android 10)'
     })
 
-    if res and res.code == 200 and res.content and #res.content > 10 then
-        -- Catch HTML Error Page if GitHub returns 404/Redirect text
+    if res and (res.code == 200 or res.status == 200) and res.content and #res.content > 10 then
         if res.content:find("<!DOCTYPE html>") or res.content:find("<html>") then
-            gg.alert("❌ RAW Link Error!\nFile name on GitHub must be 'PosyaByHerry.lua'.")
+            gg.alert("❌ RAW Link Error!\nFile 'PosyaByHerry.lua' missing or non-public in Herry-Script repo.")
             return
         end
 
@@ -124,7 +124,6 @@ function LOAD_POSYA_RUSSIAN()
             local success, runErr = pcall(runPosya)
             if not success and runErr then
                 local errStr = tostring(runErr)
-                -- Catch and handle os.exit safely without popping a error dialog
                 if not errStr:find("os.exit") and not errStr:find("called os.exit") then
                     gg.alert("❌ Runtime Error in PosyaByHerry.lua:\n" .. errStr)
                 else
