@@ -4,7 +4,7 @@
 
 -- RAW GitHub Links (Updated Repository)
 local KEYS_RAW_LINK = "https://raw.githubusercontent.com/azadamirazad99-ur/Herry-Script/main/keys.txt"
-local POSYA_RUSSIAN_RAW = "https://raw.githubusercontent.com/azadamirazad99-ur/Herry-Script/main/PosyaByHerry.lua"
+local POSYA_RUSSIAN_RAW = "https://github.com/urdushahzaib111-ctrl/HerryBot-v4/blob/main/PosyaByHerry.lua"
 
 local SECRET_OWNER_KEY = "HERRY_SECRET_PROTECT_2026_VIP"
 
