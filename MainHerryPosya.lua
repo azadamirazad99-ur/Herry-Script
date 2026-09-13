@@ -2,10 +2,8 @@
 -- 👑 HERRY HACKS OFFICIAL - MAIN MASTER SCRIPT 👑
 -- ===================================================
 
--- RAW GitHub Links
 local KEYS_RAW_LINK = "https://raw.githubusercontent.com/azadamirazad99-ur/Herry-Script/main/keys.txt"
 local POSYA_RUSSIAN_RAW = "https://raw.githubusercontent.com/azadamirazad99-ur/HerryBot-v4/main/PosyaByHerry.lua"
-
 local SECRET_OWNER_KEY = "HERRY_SECRET_PROTECT_2026_VIP"
 
 local function cleanStr(str)
@@ -13,9 +11,21 @@ local function cleanStr(str)
     return (str:gsub("%s+", ""):gsub("\r", ""):gsub("\n", ""))
 end
 
--- ---------------------------------------------------
+-- Universal Fetcher (Fixes Virtual Space Network Blocks)
+local function fetchURL(url)
+    local res = gg.makeRequest(url, {
+        ['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+        ['Accept'] = '*/*',
+        ['Connection'] = 'keep-alive'
+    })
+    
+    if res and res.content and #res.content > 0 then
+        return res.content
+    end
+    return nil
+end
+
 -- 1. WELCOME POPUP
--- ---------------------------------------------------
 if not _G.FIRST_RUN_POPUP then
     _G.FIRST_RUN_POPUP = true
     gg.alert([[
@@ -32,9 +42,7 @@ if not _G.FIRST_RUN_POPUP then
 ]])
 end
 
--- ---------------------------------------------------
 -- 2. VIP KEY VERIFICATION SYSTEM
--- ---------------------------------------------------
 gg.toast("⚡ [HERRY HACKS] Verifying Access...")
 
 local input = gg.prompt({'🔑 Enter Your VIP Access Key:'}, {[1]=''}, {[1]='text'})
@@ -49,15 +57,10 @@ local userKey = cleanStr(input[1]):lower()
 if userKey == SECRET_OWNER_KEY:lower() then
     gg.toast("👑 Master Owner Key Activated!")
 else
-    -- Added Request Headers to prevent blocking by ISP/Sandbox
-    local keys_response = gg.makeRequest(KEYS_RAW_LINK .. "?v=" .. os.time(), {
-        ['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-        ['Accept'] = '*/*'
-    })
+    local content = fetchURL(KEYS_RAW_LINK .. "?v=" .. os.time())
 
-    -- Check if content exists regardless of strict response code (bypasses sandbox network bugs)
-    if not keys_response or not keys_response.content or #keys_response.content == 0 then
-        gg.alert("❌ Network Error: Unable to connect to Key Server!\n\nCheck Virtual Space Internet Permissions or Private DNS.")
+    if not content then
+        gg.alert("❌ Network Error: Server connection failed!\n\nFix Steps:\n1. Virtual Space Settings me GameGuardian ki Internet Permission Allow karein.\n2. Private DNS ko Automatic/Off karein.")
         os.exit()
     end
 
@@ -65,10 +68,9 @@ else
     local currentSec = os.time()
     local currentMs = currentSec * 1000
 
-    for line in keys_response.content:gmatch("[^\r\n]+") do
+    for line in content:gmatch("[^\r\n]+") do
         local cleanedLine = cleanStr(line)
         if cleanedLine ~= "" then
-            -- Parse lines in KEY|EXPIRY|USERID format
             local kName, kExpiry = line:match("^([^|]+)|?([^|]*)")
 
             if kName and cleanStr(kName):lower() == userKey then
@@ -105,25 +107,19 @@ gg.alert([[
 📩 Free Access / DM: herry_escobarr
 ]])
 
--- ---------------------------------------------------
 -- 3. FETCH POSYA-RUSSIAN SCRIPT
--- ---------------------------------------------------
 function LOAD_POSYA_RUSSIAN()
     gg.toast("🔥 Loading Posya-Russian Script...")
 
-    local live_url = POSYA_RUSSIAN_RAW .. "?v=" .. os.time()
-    local res = gg.makeRequest(live_url, {
-        ['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-        ['Accept'] = '*/*'
-    })
+    local content = fetchURL(POSYA_RUSSIAN_RAW .. "?v=" .. os.time())
 
-    if res and res.content and #res.content > 10 then
-        if res.content:find("<!DOCTYPE html>") or res.content:find("<html>") or res.content:find("404: Not Found") then
+    if content and #content > 10 then
+        if content:find("<!DOCTYPE html>") or content:find("<html>") or content:find("404: Not Found") then
             gg.alert("❌ RAW Link Error!\n\nMake sure 'HerryBot-v4' Repository is PUBLIC and file 'PosyaByHerry.lua' exists.")
             return
         end
 
-        local runPosya, err = (loadstring or load)(res.content)
+        local runPosya, err = (loadstring or load)(content)
         if runPosya then
             local success, runErr = pcall(runPosya)
             if not success and runErr then
@@ -142,9 +138,7 @@ function LOAD_POSYA_RUSSIAN()
     end
 end
 
--- ---------------------------------------------------
 -- 4. MAIN MENU CONTROL
--- ---------------------------------------------------
 function MAIN_MENU()
     local options = {
         '⚡ Herry-Script [Coming Soon]',
