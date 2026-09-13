@@ -2,9 +2,9 @@
 -- 👑 HERRY HACKS OFFICIAL - MAIN MASTER SCRIPT 👑
 -- ===================================================
 
--- RAW GitHub Links (Updated Repository)
+-- RAW GitHub Links (Corrected Repository Links)
 local KEYS_RAW_LINK = "https://raw.githubusercontent.com/azadamirazad99-ur/Herry-Script/main/keys.txt"
-local POSYA_RUSSIAN_RAW = "https://github.com/azadamirazad99-ur/HerryBot-v4/blob/main/PosyaByHerry.lua"
+local POSYA_RUSSIAN_RAW = "https://raw.githubusercontent.com/azadamirazad99-ur/HerryBot-v4/main/PosyaByHerry.lua"
 
 local SECRET_OWNER_KEY = "HERRY_SECRET_PROTECT_2026_VIP"
 
@@ -25,10 +25,10 @@ if not _G.FIRST_RUN_POPUP then
 
 🔑 How to Get Key?
 1️⃣ Go to HerryHacks Server.
-2️⃣ Find The Channel: #├📃│get-key
+2️⃣ Find Channel: #├📃│get-key
 
 ❓ Don't have HerryHacks Server?
-📩 DM Owner On Discord: herry_escobarr
+📩 DM Owner on Discord: herry_escobarr
 ]])
 end
 
@@ -103,7 +103,7 @@ gg.alert([[
 ]])
 
 -- ---------------------------------------------------
--- 3. FETCH POSYA-RUSSIAN SCRIPT
+-- 3. FETCH POSYA-RUSSIAN SCRIPT (FIXED LINK & LOADING)
 -- ---------------------------------------------------
 function LOAD_POSYA_RUSSIAN()
     gg.toast("🔥 Loading Posya-Russian Script...")
@@ -114,8 +114,9 @@ function LOAD_POSYA_RUSSIAN()
     })
 
     if res and (res.code == 200 or res.status == 200) and res.content and #res.content > 10 then
-        if res.content:find("<!DOCTYPE html>") or res.content:find("<html>") then
-            gg.alert("❌ RAW Link Error!\nFile 'PosyaByHerry.lua' missing or non-public in Herry-Script repo.")
+        -- Catch HTML Error Page if Repository is Private or Link gives 404
+        if res.content:find("<!DOCTYPE html>") or res.content:find("<html>") or res.content:find("404: Not Found") then
+            gg.alert("❌ RAW Link Error!\n\nMake sure 'HerryBot-v4' Repository is PUBLIC and file 'PosyaByHerry.lua' exists.")
             return
         end
 
