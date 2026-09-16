@@ -1968,13 +1968,15 @@ end
 toast.success("🔥 HERRY VIP SCRIPT LOADED 🔥")
 gg.sleep(1500) 
 
-while true do
-    if gg.isVisible(true) then
-        menuuuvis = 1
-        gg.setVisible(false)
+pcall(function()
+    while true do
+        if gg.isVisible(true) then
+            menuuuvis = 1
+            gg.setVisible(false)
+        end
+        if menuuuvis == 1 then
+            mainMenu()
+        end
+        gg.sleep(100)
     end
-    if menuuuvis == 1 then
-        mainMenu()
-    end
-    gg.sleep(100)
-end
+end)
