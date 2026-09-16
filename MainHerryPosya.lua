@@ -4,7 +4,7 @@
 
 local KEYS_RAW_LINK = "https://raw.githubusercontent.com/azadamirazad99-ur/Herry-Script/main/keys.txt"
 local POSYA_RUSSIAN_RAW = "https://raw.githubusercontent.com/azadamirazad99-ur/HerryBot-v4/main/PosyaByHerry.lua"
-local POSYA_ENGLISH_RAW = "https://raw.githubusercontent.com/azadamirazad99-ur/Herry-Script/main/English.lua"
+local POSYA_ENGLISH_RAW = "https://github.com/azadamirazad99-ur/Herry-Script/blob/main/English.lua"
 local SECRET_OWNER_KEY = "HERRY_SECRET_PROTECT_2026_VIP"
 
 -- Clean string (removes whitespace, carriage returns, newlines)
