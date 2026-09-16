@@ -1701,12 +1701,12 @@ end
 local publicPlaces = {
     {name = '🏫 Driving School', x = 486, y = 2276, z = 12},
     {name = '🏛️ Military Base Gate', x = 1915, y = 2302, z = 15},
-    {name = '🏦 South Central Bank', x = 2372, y = -2142, z = 23},
+    {name = '🏦 Yuzhny Bank', x = 2372, y = -2142, z = 23},
     {name = '🏦 Bank Arzamas', x = -143, y = 593, z = 12},
     {name = '🏦 Bank Batyrevo', x = 1850, y = 2042, z = 16},
-    {name = '⛪ City Church', x = 1877, y = 1166, z = 31},
-    {name = '🚗 Auto Market', x = 878, y = 2236, z = 19},
-    {name = '📮 Central Post Office', x = 801, y = 1349, z = 15}
+    {name = '⛪  Church', x = 1877, y = 1166, z = 31},
+    {name = '🚗 Car Market', x = 878, y = 2236, z = 19},
+    {name = '📮  Post Office', x = 801, y = 1349, z = 15}
 }
 
 local hiddenteleports = {
@@ -1725,9 +1725,9 @@ local hiddenteleports = {
 }
 
 local stations = {
-    {name = '🚌 Bus Terminal Arzamas', x = -561, y = 931, z = 12},
-    {name = '🚌 Bus Terminal South', x = 2734, y = -2447, z = 22},
-    {name = '🚌 Bus Terminal Batyrevo', x = 1813, y = 2513, z = 15},
+    {name = '🚌 Bus Station Arzamas', x = -561, y = 931, z = 12},
+    {name = '🚌 Bus Station Yuzhny', x = 2734, y = -2447, z = 22},
+    {name = '🚌 Bus Station Batyrevo', x = 1813, y = 2513, z = 15},
     {name = '🚉 Main Railway Station', x = 2499, y = -2145, z = 22}
 }
 
@@ -1735,18 +1735,18 @@ local parking = {
   {name = '🅿️ Economy Car Parking', x = 2323, y = -1800, z = 22},
   {name = '🅿️ Comfort Car Parking', x = 2202.15, y = 2884.95, z = 26.58},
   {name = '🅿️ Premium Car Parking', x = 602, y = 998, z = 12},
-  {name = '🛵 Scooter Parking Yard', x = 340, y = 479, z = 12.3},
-  {name = '🅿️ Arzamas Parking Plaza', x = 420, y = 584, z = 12}
+  {name = '🛵 Scooter Parking ARZ', x = 340, y = 479, z = 12.3},
+  {name = '🅿️ Arzamas Parking', x = 420, y = 584, z = 12}
 }
 
 local government = {
-    {name = '🏛️ City Government Hall', x = -79, y = 839, z = 17},
-    {name = '⚔️ Army HQ Garrison', x = 1872, y = 1723, z = 15},
-    {name = '🏥 Arzamas Central Hospital', x = 361, y = 1332, z = 13},
-    {name = '🏥 South Hospital Depot', x = 2118, y = -2386, z = 23},
-    {name = '👮 Police HQ Arzamas', x = 153, y = 1265, z = 12},
-    {name = '👮 Police HQ South', x = 2582, y = -2421, z = 23},
-    {name = '🕵️ Federal Security Bureau', x = 1896, y = -1995, z = 31}
+    {name = '🏛️ City Government', x = -79, y = 839, z = 17},
+    {name = '⚔️ Military Uniy', x = 1872, y = 1723, z = 15},
+    {name = '🏥 Arzamas Hospital', x = 361, y = 1332, z = 13},
+    {name = '🏥 Yuzhny Hospital Depot', x = 2118, y = -2386, z = 23},
+    {name = '👮 Police Arzamas', x = 153, y = 1265, z = 12},
+    {name = '👮 Police Yuzhny', x = 2582, y = -2421, z = 23},
+    {name = '🕵️ SIS ', x = 1896, y = -1995, z = 31}
 }
 
 local criminal = {
@@ -1760,14 +1760,14 @@ local criminal = {
 
 
 local starterJobs = {
-    {name = '🏭 Tech Assembly Factory', x = -2547, y = 534, z = 9},
-    {name = '⛏️ Industrial Quarry Mine', x = -1109, y = 1363, z = 31.5},
-    {name = '🌾 Agricultural Farm Field', x = 950, y = -910, z = 39}
+    {name = '🏭  Factory #1 ', x = -2547, y = 534, z = 9},
+    {name = '⛏️  Quarry Mine', x = -1109, y = 1363, z = 31.5},
+    {name = '🌾 Farm', x = 950, y = -910, z = 39}
 }
 
 local jobs = {
-    {name = '🚕 Taxi Depot HQ', x = 757, y = 757, z = 11},
-    {name = '🚌 City Bus Depot', x = 786, y = 750, z = 12},
+    {name = '🚕 Taxi Job', x = 757, y = 757, z = 11},
+    {name = '🚌 Bus Job ', x = 786, y = 750, z = 12},
     {name = '📮 Courier Post Station', x = 801, y = 1349, z = 15},
     {name = '🔧 Mechanic Garage Shop', x = 2132, y = -1847, z = 20}
 }
@@ -1776,7 +1776,7 @@ local entertainment = {
     {name = '🎰 Grand Casino Resort', x = 327, y = 2762, z = 8},
     {name = '🔨 Trade Auction House', x = 443, y = -393, z = 9},
     {name = '🏎️ Extreme Drift Arena', x = 2333, y = 1182, z = 20},
-    {name = '🌳 Central City Park', x = 330, y = 2670, z = 8}
+    {name = '🌳  City Park', x = 330, y = 2670, z = 8}
 }
 
 local airdropAdil = {
@@ -1793,8 +1793,8 @@ local heliClubs = {
 }
 
 local buyers = {
-    {name = '💰 Dealer Spot South', x = 2331, y = -1989, z = 22},
-    {name = '💰 Dealer Spot Arzamas', x = -89, y = 961, z = 12}
+    {name = '💰 Notary Yuzhny', x = 2331, y = -1989, z = 22},
+    {name = '💰 Notary Arzamas', x = -89, y = 961, z = 12}
 }
 
 local businesses = {
@@ -1831,10 +1831,10 @@ function showLocations(locations, title)
 end
 
 function showPublicPlaces() showLocations(publicPlaces, "PUBLIC WAYPOINTS") end
-function showHiddenTeleports() showLocations(hiddenteleports, "SECRET TELEPORT ZONES") end
+function showHiddenTeleports() showLocations(hiddenteleports, "ENTERTAINMENT TELEPORT ZONES") end
 function showStations() showLocations(stations, "TRANSPORT STATIONS") end
 function showParking() showLocations(parking, "PARKING LOT LOCATIONS") end
-function showGovernment() showLocations(government, "GOVERNMENT SECTORS") end
+function showGovernment() showLocations(government, "GOVERNMENT Organization") end
 function showCriminal() showLocations(criminal, "FACTION & GANG BASES") end
 function showStarterJobs() showLocations(starterJobs, "STARTER WORK ZONES") end
 function showJobs() showLocations(jobs, "MAIN EMPLOYMENT LOCATIONS") end
