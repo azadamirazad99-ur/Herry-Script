@@ -7,26 +7,29 @@ local POSYA_RUSSIAN_RAW = "https://raw.githubusercontent.com/azadamirazad99-ur/H
 local POSYA_ENGLISH_RAW = "https://raw.githubusercontent.com/azadamirazad99-ur/Herry-Script/main/English.lua"
 local SECRET_OWNER_KEY = "HERRY_SECRET_PROTECT_2026_VIP"
 
+-- Clean string (removes whitespace, carriage returns, newlines)
 local function cleanStr(str)
     if not str then return "" end
     return (str:gsub("%s+", ""):gsub("\r", ""):gsub("\n", ""))
 end
 
--- Universal Fetcher (Fixes Virtual Space Network Blocks)
+-- Universal Fetcher with Browser Headers
 local function fetchURL(url)
     local res = gg.makeRequest(url, {
         ['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
         ['Accept'] = '*/*',
         ['Connection'] = 'keep-alive'
     })
-    
+
     if res and res.content and #res.content > 0 then
         return res.content
     end
     return nil
 end
 
+-- ---------------------------------------------------
 -- 1. WELCOME POPUP
+-- ---------------------------------------------------
 if not _G.FIRST_RUN_POPUP then
     _G.FIRST_RUN_POPUP = true
     gg.alert([[
@@ -43,7 +46,9 @@ if not _G.FIRST_RUN_POPUP then
 ]])
 end
 
+-- ---------------------------------------------------
 -- 2. VIP KEY VERIFICATION SYSTEM
+-- ---------------------------------------------------
 gg.toast("⚡ [HERRY HACKS] Verifying Access...")
 
 local input = gg.prompt({'🔑 Enter Your VIP Access Key:'}, {[1]=''}, {[1]='text'})
@@ -66,34 +71,51 @@ else
     end
 
     local isValidKey = false
+    local isExpiredKey = false
     local currentSec = os.time()
     local currentMs = currentSec * 1000
 
     for line in content:gmatch("[^\r\n]+") do
         local cleanedLine = cleanStr(line)
         if cleanedLine ~= "" then
-            local kName, kExpiry = line:match("^([^|]+)|?([^|]*)")
+            -- Parse pipeline (|) split entries
+            local parts = {}
+            for part in line:gmatch("[^|]+") do
+                table.insert(parts, cleanStr(part))
+            end
 
-            if kName and cleanStr(kName):lower() == userKey then
-                local expTime = tonumber(cleanStr(kExpiry))
+            local kName = parts[1] or ""
+            local kExpiry = parts[2] or ""
+
+            if kName:lower() == userKey then
+                local expTime = tonumber(kExpiry)
                 if expTime then
-                    local isExpired = (expTime > 1000000000000) and (expTime < currentMs) or (expTime < currentSec)
-                    if isExpired then
-                        gg.alert("❌ Key Has Expired!\nPlease get a new key from Discord.")
-                        os.exit()
+                    local isExpired = false
+                    if expTime > 1000000000000 then
+                        isExpired = (expTime < currentMs)
+                    else
+                        isExpired = (expTime < currentSec)
                     end
+
+                    if isExpired then
+                        isExpiredKey = true
+                    else
+                        isValidKey = true
+                    end
+                else
+                    -- If no valid timestamp, treat key as active
+                    isValidKey = true
                 end
-                isValidKey = true
-                break
-            elseif cleanedLine:lower() == userKey then
-                isValidKey = true
                 break
             end
         end
     end
 
-    if not isValidKey then
-        gg.alert("❌ Invalid or Expired Key!\n\nGet a new key from Discord using /getkey command.")
+    if isExpiredKey then
+        gg.alert("❌ Key Has Expired!\n\nPlease get a new key from Discord using /getkey command.")
+        os.exit()
+    elseif not isValidKey then
+        gg.alert("❌ Invalid Key!\n\nPlease check your key and try again.")
         os.exit()
     end
 end
@@ -108,7 +130,9 @@ gg.alert([[
 📩 Free Access / DM: herry_escobarr
 ]])
 
+-- ---------------------------------------------------
 -- 3. FETCH POSYA-RUSSIAN SCRIPT
+-- ---------------------------------------------------
 function LOAD_POSYA_RUSSIAN()
     gg.toast("🔥 Loading Posya-Russian Script...")
 
@@ -139,7 +163,9 @@ function LOAD_POSYA_RUSSIAN()
     end
 end
 
+-- ---------------------------------------------------
 -- 4. FETCH POSYA-ENGLISH SCRIPT
+-- ---------------------------------------------------
 function LOAD_POSYA_ENGLISH()
     gg.toast("🌐 Loading Posya-English Script...")
 
@@ -170,7 +196,9 @@ function LOAD_POSYA_ENGLISH()
     end
 end
 
+-- ---------------------------------------------------
 -- 5. MAIN MENU CONTROL
+-- ---------------------------------------------------
 function MAIN_MENU()
     local options = {
         '⚡ Herry-Script [Coming Soon]',
