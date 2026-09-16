@@ -4,6 +4,7 @@
 
 local KEYS_RAW_LINK = "https://raw.githubusercontent.com/azadamirazad99-ur/Herry-Script/main/keys.txt"
 local POSYA_RUSSIAN_RAW = "https://raw.githubusercontent.com/azadamirazad99-ur/HerryBot-v4/main/PosyaByHerry.lua"
+local POSYA_ENGLISH_RAW = "https://raw.githubusercontent.com/azadamirazad99-ur/Herry-Script/main/English.lua"
 local SECRET_OWNER_KEY = "HERRY_SECRET_PROTECT_2026_VIP"
 
 local function cleanStr(str)
@@ -138,12 +139,43 @@ function LOAD_POSYA_RUSSIAN()
     end
 end
 
--- 4. MAIN MENU CONTROL
+-- 4. FETCH POSYA-ENGLISH SCRIPT
+function LOAD_POSYA_ENGLISH()
+    gg.toast("🌐 Loading Posya-English Script...")
+
+    local content = fetchURL(POSYA_ENGLISH_RAW .. "?v=" .. os.time())
+
+    if content and #content > 10 then
+        if content:find("<!DOCTYPE html>") or content:find("<html>") or content:find("404: Not Found") then
+            gg.alert("❌ RAW Link Error!\n\nMake sure 'Herry-Script' Repository is PUBLIC and file 'English.lua' exists.")
+            return
+        end
+
+        local runPosya, err = (loadstring or load)(content)
+        if runPosya then
+            local success, runErr = pcall(runPosya)
+            if not success and runErr then
+                local errStr = tostring(runErr)
+                if not errStr:find("os.exit") and not errStr:find("called os.exit") then
+                    gg.alert("❌ Runtime Error in English.lua:\n" .. errStr)
+                else
+                    os.exit()
+                end
+            end
+        else
+            gg.alert("❌ Syntax Error in English.lua:\n" .. tostring(err))
+        end
+    else
+        gg.alert("❌ Failed to download English.lua from GitHub!\nCheck Virtual Space Internet access.")
+    end
+end
+
+-- 5. MAIN MENU CONTROL
 function MAIN_MENU()
     local options = {
         '⚡ Herry-Script [Coming Soon]',
         '🔥 Posya-Russian [v4.0]',
-        '🌐 Posya-English [Coming Soon]',
+        '🌐 Posya-English [v4.0]',
         '❌ Exit Script'
     }
 
@@ -159,7 +191,7 @@ function MAIN_MENU()
     elseif menu == 2 then
         LOAD_POSYA_RUSSIAN()
     elseif menu == 3 then
-        gg.alert("🌐 Posya-English Version is Coming Soon!")
+        LOAD_POSYA_ENGLISH()
     elseif menu == 4 then
         gg.toast("👋 Exiting Herry Hacks...")
         os.exit()
