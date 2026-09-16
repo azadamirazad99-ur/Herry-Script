@@ -1750,9 +1750,9 @@ local government = {
 }
 
 local criminal = {
-    {name = '💀 Syndicate Base #1', x = 2425, y = -1922, z = 22},
-    {name = '💀 Syndicate Base #2', x = 2285, y = 1369, z = 11},
-    {name = '🖤 Underground Black Market', x = -2249, y = 245, z = 24.5},
+    {name = '💀 Tambov Base #1', x = 2425, y = -1922, z = 22},
+    {name = '💀 Kurgan Base', x = 2285, y = 1369, z = 11},
+    {name = '🖤 Black Market', x = -2249, y = 245, z = 24.5},
     {name = '⚔️ Bizzwar Zone Sawmill', x = -1043.95, y = -2464.63, z = 28.48}
 }
 
