@@ -1758,7 +1758,6 @@ local criminal = {
     {name = '⚔️ Bizzwar Zone Sawmill', x = -1043.95, y = -2464.63, z = 28.48}
 }
 
-
 local starterJobs = {
     {name = '🏭  Factory #1 ', x = -2547, y = 534, z = 9},
     {name = '⛏️  Quarry Mine', x = -1109, y = 1363, z = 31.5},
@@ -1811,6 +1810,20 @@ local quarries = {
     {name = '⛏️ South Mining Quarry', x = 2053, y = -700, z = 12.40}
 }
 
+-- New VIP Locations List (Requested 10 Unique Spots)
+local vipLocations = {
+    {name = '🎉 Funny Spot for You & Partner', x = 150, y = -2408, z = 33},
+    {name = '🗼 Watch Tower', x = 481, y = -2407, z = 83},
+    {name = '🪩 Disco & Singing Spot', x = 681, y = -2307, z = 36},
+    {name = '⚔️ Biz War Location', x = -1046, y = -2480, z = 28},
+    {name = '🏴‍☠️ Black Water Prison', x = -1751, y = -2856, z = 13},
+    {name = '🏢 Actual Prison Roof', x = -2723, y = -2649, z = 23},
+    {name = '🌊 Land in Water', x = -740, y = 2486, z = 39},
+    {name = '🍏 Apple Banner View', x = -1043, y = 2142, z = 38},
+    {name = '⚰️ Graveyard', x = -2518, y = 2597, z = 45},
+    {name = '🛣️ Straight Road (Speed Testing)', x = -2639, y = 1934, z = 52}
+}
+
 function showLocations(locations, title)
     local menu = {}
     for i, loc in ipairs(locations) do
@@ -1845,9 +1858,24 @@ function showBuyers() showLocations(buyers, "ILLEGAL BUYER SPOTS") end
 function showBusinesses() showLocations(businesses, "COMMERCIAL BUSINESSES") end
 function showQuarries() showLocations(quarries, "MINING QUARRY LOCATIONS") end
 
+-- VIP Location Password Verification Function
+function showVipLocations()
+    local passInput = gg.prompt({"🔐 Enter VIP Password:"}, {""}, {"text"})
+    if not passInput then return teleportByFootMenu() end
+    
+    if passInput[1] == "Herry-Fr-senior" then
+        gg.toast("🔓 Access Granted!")
+        showLocations(vipLocations, "👑 HERRY-FR-SENIOR VIP LOCATIONS")
+    else
+        gg.alert("❌ Incorrect Password! Access Denied.")
+        teleportByFootMenu()
+    end
+end
+
 function teleportByFootMenu()
     menuuuvis = 0
     local choice = gg.choice({
+        formatBtn("👑 Herry-Fr-senior VIP Locations"),
         formatBtn("🏢 Public Waypoints"),
         formatBtn("💪 Secret Teleport Zones"),
         formatBtn("🚉 Transport Stations"),
@@ -1866,22 +1894,23 @@ function teleportByFootMenu()
         formatBtn("🔙 Return Back")
     }, nil, getUIHeader("FOOT LOCATION TELEPORT DIRECTORY"))
     
-    if not choice or choice == 16 then tpMenu() end
-    if choice == 1 then showPublicPlaces()
-    elseif choice == 2 then showHiddenTeleports()
-    elseif choice == 3 then showStations()
-    elseif choice == 4 then showParking()
-    elseif choice == 5 then showGovernment()
-    elseif choice == 6 then showCriminal()
-    elseif choice == 7 then showStarterJobs()
-    elseif choice == 8 then showJobs()
-    elseif choice == 9 then showEntertainment()
-    elseif choice == 10 then showAirdropAdil()
-    elseif choice == 11 then showHeliClubs()
-    elseif choice == 12 then showBuyers()
-    elseif choice == 13 then showBusinesses()
-    elseif choice == 14 then showQuarries()
-    elseif choice == 15 then viewSavedPoints()
+    if not choice or choice == 17 then tpMenu() end
+    if choice == 1 then showVipLocations()
+    elseif choice == 2 then showPublicPlaces()
+    elseif choice == 3 then showHiddenTeleports()
+    elseif choice == 4 then showStations()
+    elseif choice == 5 then showParking()
+    elseif choice == 6 then showGovernment()
+    elseif choice == 7 then showCriminal()
+    elseif choice == 8 then showStarterJobs()
+    elseif choice == 9 then showJobs()
+    elseif choice == 10 then showEntertainment()
+    elseif choice == 11 then showAirdropAdil()
+    elseif choice == 12 then showHeliClubs()
+    elseif choice == 13 then showBuyers()
+    elseif choice == 14 then showBusinesses()
+    elseif choice == 15 then showQuarries()
+    elseif choice == 16 then viewSavedPoints()
     end
     menuuuvis = -1
 end
