@@ -560,12 +560,15 @@ function shv22()
 end
 
 function flpp1()
+    local p = gg.prompt({"Enter Flip Downward Value:"}, {"7"}, {"number"})
+    if not p then return player() end
+    local val = tonumber(p[1]) or 7
     Z.S("4575657250219098112", Q, bor(Ca, O))
     if Result and #Result ~= 0 then 
         local t = {}
         for i,v in ipairs(Result) do t[i] = {address = v.address + 140, flags = F} end
         t = gg.getValues(t)
-        for i,v in ipairs(t) do v.value = v.value - 7 end
+        for i,v in ipairs(t) do v.value = v.value - val end
         gg.setValues(t)
         abc()
     else 
@@ -576,12 +579,15 @@ function flpp1()
 end
 
 function flpp()
+    local p = gg.prompt({"Enter Flip Upward Value:"}, {"7"}, {"number"})
+    if not p then return player() end
+    local val = tonumber(p[1]) or 7
     Z.S("4575657250219098112", Q, bor(Ca, O))
     if Result and #Result ~= 0 then 
         local t = {}
         for i,v in ipairs(Result) do t[i] = {address = v.address + 140, flags = F} end
         t = gg.getValues(t)
-        for i,v in ipairs(t) do v.value = v.value + 7 end
+        for i,v in ipairs(t) do v.value = v.value + val end
         gg.setValues(t)
         abc()
     else 
@@ -1721,7 +1727,17 @@ local hiddenteleports = {
   {name = '🎰 CASINO ROOFTOP', x = 331, y = 2800, z = 33},
   {name = '🏰 KREMLIN PALACE', x = -2480, y = 1675, z = 53},
   {name = '⚔️ FAM WAR MAIN ENTRANCE', x = 1501.1, y = -301.6, z = 7.3},
-  {name = '⚓ COMMERCIAL PORT', x = 2493.50, y = 354.48, z = 29.73}
+  {name = '⚓ COMMERCIAL PORT', x = 2493.50, y = 354.48, z = 29.73},
+  {name = '💖 Funny Spot for You & Partner', x = 150, y = -2408, z = 33},
+  {name = '🗼 Watch Tower', x = 481, y = -2407, z = 83},
+  {name = '🎶 Disco & Singing Spot', x = 681, y = -2307, z = 36},
+  {name = '⚔️ Biz War Location', x = -1046, y = -2480, z = 28},
+  {name = '🖤 Black Water Prison', x = -1751, y = -2856, z = 13},
+  {name = '🧱 Actual Prison Roof', x = -2723, y = -2649, z = 23},
+  {name = '🌊 Land in Water', x = -740, y = 2486, z = 39},
+  {name = '🍎 Apple Banner View', x = -1043, y = 2142, z = 38},
+  {name = '⚰️ Graveyard', x = -2518, y = 2597, z = 45},
+  {name = '🛣️ Straight Road (Speed Testing)', x = -2639, y = 1934, z = 52}
 }
 
 local stations = {
@@ -1979,4 +1995,4 @@ pcall(function()
         end
         gg.sleep(100)
     end
-end) 
+end)
