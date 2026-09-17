@@ -1710,7 +1710,7 @@ local publicPlaces = {
 }
 
 local hiddenteleports = {
-  {name = '🔒 ADMIN ZONE', x = -700, y = -2450, z = 1201},
+  {name = '🔒 ADMIN ZONE', x = -701.82, y = -2438.95, z = 1198.15},
   {name = '🔓 JAIL ESCAPE POINT', x = 644.01, y = 1049.21, z = 1208.26},
   {name = '🚔 HIGH SECURITY PRISON', x = -1830, y = -2870, z = 45},
   {name = '⚔️ MILITARY SECTOR #1', x = -1092.7, y = -2539.2, z = 28.6},
