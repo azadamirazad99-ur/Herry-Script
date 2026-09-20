@@ -1738,6 +1738,7 @@ local hiddenteleports = {
   {name = '🍎 Apple Banner View', x = -1043, y = 2142, z = 38},
   {name = '⚰️ Graveyard', x = -2518, y = 2597, z = 45},
   {name = '🛣️ Straight Road (Speed Testing)', x = -2639, y = 1934, z = 52}
+{name = '🔒 Tss Rooftop', x = 734.74, y = 535.28, z = 22.57},
 }
 
 local stations = {
