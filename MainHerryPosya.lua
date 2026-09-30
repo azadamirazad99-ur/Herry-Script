@@ -13,12 +13,18 @@ local function cleanStr(str)
     return (str:gsub("%s+", ""):gsub("\r", ""):gsub("\n", ""))
 end
 
--- Universal Fetcher with Browser Headers
+-- Universal Fetcher with Browser Headers & Anti-Cache
 local function fetchURL(url)
-    local res = gg.makeRequest(url, {
+    -- Anti-Cache query added so GitHub raw updates instantly without delay
+    local separator = url:find("?") and "&" or "?"
+    local targetURL = url .. separator .."nocache=" .. os.time() .. "_" .. math.random(1000, 9999)
+
+    local res = gg.makeRequest(targetURL, {
         ['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
         ['Accept'] = '*/*',
-        ['Connection'] = 'keep-alive'
+        ['Cache-Control'] = 'no-cache, no-store, must-revalidate',
+        ['Pragma'] = 'no-cache',
+        ['Connection'] = 'close'
     })
 
     if res and res.content and #res.content > 0 then
@@ -63,7 +69,7 @@ local userKey = cleanStr(input[1]):lower()
 if userKey == SECRET_OWNER_KEY:lower() then
     gg.toast("👑 Master Owner Key Activated!")
 else
-    local content = fetchURL(KEYS_RAW_LINK .. "?v=" .. os.time())
+    local content = fetchURL(KEYS_RAW_LINK)
 
     if not content then
         gg.alert("❌ Network Error: Server connection failed!\n\nFix Steps:\n1. Virtual Space Settings me GameGuardian ki Internet Permission Allow karein.\n2. Private DNS ko Automatic/Off karein.")
@@ -135,7 +141,7 @@ gg.alert([[
 function LOAD_POSYA_RUSSIAN()
     gg.toast("🔥 Loading Posya-Russian Script...")
 
-    local content = fetchURL(POSYA_RUSSIAN_RAW .. "?v=" .. os.time())
+    local content = fetchURL(POSYA_RUSSIAN_RAW)
 
     if content and #content > 10 then
         if content:find("<!DOCTYPE html>") or content:find("<html>") or content:find("404: Not Found") then
@@ -166,7 +172,7 @@ end
 function LOAD_POSYA_ENGLISH()
     gg.toast("🌐 Loading Posya-English Script...")
 
-    local content = fetchURL(POSYA_ENGLISH_RAW .. "?v=" .. os.time())
+    local content = fetchURL(POSYA_ENGLISH_RAW)
 
     if content and #content > 10 then
         if content:find("<!DOCTYPE html>") or content:find("<html>") or content:find("404: Not Found") then
