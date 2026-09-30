@@ -29,7 +29,7 @@ pcall(_protectDecompile)
 
 gg.setVisible(false) 
 
--- Universal Bitwise OR Helper for Range Safety
+-- Universal Bitwise OR Helper for Range Safety & Architecture Support
 local function bor(a, b, c, d, e)
     local res = a or 0
     for _, val in ipairs({b, c, d, e}) do
@@ -43,6 +43,10 @@ local function bor(a, b, c, d, e)
     end
     return res
 end
+
+-- Universal Architecture & Android Version Detector
+local targetInfo = gg.getTargetInfo()
+local is64Bit = targetInfo and targetInfo.x64 or false
 
 -- ==========================================
 --          GLOBAL SETUP & CORE ENGINE
@@ -85,7 +89,7 @@ Z = {}
 ts = gg.toast
 alert = gg.alert
 
--- Memory Type & Region Definitions with Fail-safe Fallbacks
+-- Memory Type & Region Definitions with Universal 32/64-bit Fallbacks
 A = gg.REGION_ANONYMOUS or 32
 As = gg.REGION_ANONYMOUS or 524288
 B = gg.REGION_BAD or 131072
@@ -102,8 +106,8 @@ Ps = gg.REGION_PPSSPP or 262144
 S = gg.REGION_STACK or 64
 V = gg.REGION_VIDEO or 1048576
 
--- Combined Fallback Ranges
-CalO = bor(Ca, Cd, O)
+-- Universal Combined Ranges for All Android Versions (32-bit & 64-bit)
+CalO = bor(Ca, Cd, O, B, A)
 
 F = gg.TYPE_FLOAT or 16
 D = gg.TYPE_DWORD or 4
@@ -118,8 +122,9 @@ local function getUIHeader(title)
     local currentDate = os.date("%Y-%m-%d")
     local processInfo = gg.getTargetInfo()
     local processName = (processInfo and processInfo.label) or "Grand Mobile"
+    local archType = is64Bit and "64-bit" or "32-bit"
     return "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" ..
-           "🔥 HERRY VIP SYSTEM 🔥\n" ..
+           "🔥 HERRY VIP SYSTEM (" .. archType .. ") 🔥\n" ..
            "📅 TODAY'S DATE: " .. currentDate .. "\n" ..
            "🎮 GAME PROCESS: " .. processName .. "\n" ..
            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" ..
@@ -132,7 +137,7 @@ gg.alert("━━━━━━━━━━━━━━━━━━━━━━━�
          "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" ..
          "👤 Developer: Herry\n" ..
          "💬 Discord: herry_escobarr\n" ..
-         "🚀 Version: Premium English Edition\n" ..
+         "🚀 Version: Universal Android Edition\n" ..
          "━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 
 function setvalue(add, value, flags, dj)
@@ -149,19 +154,26 @@ function setvalue(add, value, flags, dj)
     end
 end
 
--- FIXED Z.S FUNCTION (Added rigorous nil-check for setRanges to prevent crash)
+-- UNIVERSAL MEMORY SEARCH FUNCTION (Optimized for all Android versions & architectures)
 function Z.S(num, ty, nc, mb, qs, zd)
     gg.clearResults()
     local rangesToSet = nc or CalO
     if type(rangesToSet) ~= "number" or rangesToSet == 0 then
-        rangesToSet = 4 + 8 + (-2080896) -- Fallback explicit bitwise sum for Ca, Cd, O
+        rangesToSet = bor(Ca, Cd, O, B, A)
     end
     pcall(function() gg.setRanges(rangesToSet) end)
     gg.searchNumber(num, ty, false, gg.SIGN_EQUAL, qs or 1, zd or -1)
     if mb ~= nil and mb ~= false and mb then
-        gg.refineAddress(mb)
+        pcall(function() gg.refineAddress(mb) end)
     end
     Result = gg.getResults(gg.getResultCount())
+    
+    -- Fallback search if 0 results found on strict regions
+    if (not Result or #Result == 0) and rangesToSet ~= bor(Ca, Cd, O, B, A) then
+        pcall(function() gg.setRanges(bor(Ca, Cd, O, B, A)) end)
+        gg.searchNumber(num, ty, false, gg.SIGN_EQUAL, qs or 1, zd or -1)
+        Result = gg.getResults(gg.getResultCount())
+    end
 end
 
 function Z.C(num, C, ty)
@@ -253,7 +265,7 @@ end
 
 function doTeleport(x, y, z)
     gg.clearResults()
-    gg.setRanges(bor(Ca, O))
+    gg.setRanges(bor(Ca, Cd, O, B, A))
     gg.searchNumber("4575657250219098112", Q, false, gg.SIGN_EQUAL, 1, -1)
     
     local results = gg.getResults(1)
@@ -310,7 +322,7 @@ function aimnew()
             
             gg.clearResults()
             if aim_st[r].s then
-                gg.setRanges(bor(gg.REGION_C_ALLOC, gg.REGION_OTHER))
+                gg.setRanges(bor(gg.REGION_C_ALLOC, gg.REGION_OTHER, gg.REGION_BAD))
                 gg.searchNumber(old, gg.TYPE_DWORD)
                 if gg.getResultCount() > 0 then
                     gg.getResults(10000)
@@ -320,7 +332,7 @@ function aimnew()
                     qwea()
                 end
             else
-                gg.setRanges(bor(gg.REGION_C_ALLOC, gg.REGION_OTHER))
+                gg.setRanges(bor(gg.REGION_C_ALLOC, gg.REGION_OTHER, gg.REGION_BAD))
                 gg.searchNumber(aim_st[r].v, gg.TYPE_DWORD)
                 if gg.getResultCount() > 0 then
                     gg.getResults(10000)
@@ -360,7 +372,7 @@ function aimold()
         for i = 1, 10000 do
             if gg.isVisible() then break end
             gg.clearResults()
-            gg.setRanges(bor(gg.REGION_C_ALLOC, gg.REGION_OTHER))
+            gg.setRanges(bor(gg.REGION_C_ALLOC, gg.REGION_OTHER, gg.REGION_BAD))
             gg.searchNumber(aims[s][3], gg.TYPE_DWORD)
             if gg.getResultCount() > 0 then
                 gg.getResults(10000)
@@ -372,7 +384,7 @@ function aimold()
                 if gg.isVisible() then
                     gg.setVisible(false)
                     gg.clearResults()
-                    gg.setRanges(bor(gg.REGION_C_ALLOC, gg.REGION_C_DATA, gg.REGION_OTHER))
+                    gg.setRanges(bor(gg.REGION_C_ALLOC, gg.REGION_C_DATA, gg.REGION_OTHER, gg.REGION_BAD))
                     gg.searchNumber(aims[s][2], gg.TYPE_DWORD)
                     if gg.getResultCount() > 0 then
                         gg.getResults(10000)
@@ -399,7 +411,7 @@ function AimbotMasterMenu()
         local aChoice = gg.choice({
             formatBtn("🎯 Modern Dynamic Aimbot"),
             formatBtn("🎯 Legacy Loop Aimbot"),
-            formatBtn("⬅️ Return to Main Menu")
+            formatBtn("⬅️️ Return to Main Menu")
         }, nil, getUIHeader("AIMBOT CONTROL SYSTEM"))
         
         if aChoice == 1 then 
@@ -482,7 +494,7 @@ end
 
 function hj()
     st_hjj = not st_hjj
-    Z.S("4798022456217645875", Q, bor(Cd, O))
+    Z.S("4798022456217645875", Q, bor(Cd, O, B))
     Z.W(st_hjj and "-150" or "-0.10000000149", -0x4, F)
     gg.clearResults()
     if st_hjj then abc() else cba() end
@@ -491,7 +503,7 @@ end
 
 function fovqqq()
     st_mbq = not st_mbq
-    Z.S(st_mbq and "4489188110498131456" or "4489188110487257088", Q, bor(Ca, Cd, O))
+    Z.S(st_mbq and "4489188110498131456" or "4489188110487257088", Q, bor(Ca, Cd, O, B))
     if Result and #Result ~= 0 then 
         gg.editAll(st_mbq and "4489188110487257088" or "4489188110498131456", Q)
         if st_mbq then abc() else cba() end 
@@ -504,7 +516,7 @@ end
 
 function walgh()
     st_walg = not st_walg
-    Z.S(st_walg and "1114636288" or "1114767360", Q, bor(Ca, O, Cd))
+    Z.S(st_walg and "1114636288" or "1114767360", Q, bor(Ca, O, Cd, B))
     if Result and #Result ~= 0 then 
         gg.editAll(st_walg and "1114767360" or "1114636288", Q)
         if st_walg then abc() else cba() end 
@@ -517,10 +529,10 @@ end
 
 function fastk()
     st_fastkil = not st_fastkil
-    Z.S(st_fastkil and "9187343240761165228" or "4489188110505082880", Q, bor(Ca, O, Cd))
+    Z.S(st_fastkil and "9187343240761165228" or "4489188110505082880", Q, bor(Ca, O, Cd, B))
     if Result and #Result ~= 0 then 
         gg.editAll(st_fastkil and "4489188110505082880" or "9187343240761165228", Q)
-        Z.S(st_fastkil and "4489188110487257088" or "4489188110499840000", Q, bor(Ca, O, Cd))
+        Z.S(st_fastkil and "4489188110487257088" or "4489188110499840000", Q, bor(Ca, O, Cd, B))
         if Result and #Result ~= 0 then 
             gg.editAll(st_fastkil and "4489188110499840000" or "4489188110487257088", Q)
         end 
@@ -534,7 +546,7 @@ end
 
 function gravityv2()
     st_graviqq = not st_graviqq
-    Z.S("-4651317692702523392", Q, bor(Cd, O))
+    Z.S("-4651317692702523392", Q, bor(Cd, O, B))
     Z.W(st_graviqq and "-1164859368" or "-1140649361", -0x4, D)
     gg.clearResults()
     if st_graviqq then abc() else cba() end
@@ -543,7 +555,7 @@ end
 
 function gravity()
     st_graviq = not st_graviq
-    Z.S("-4651317692702523392", Q, bor(Cd, O))
+    Z.S("-4651317692702523392", Q, bor(Cd, O, B))
     Z.W(st_graviq and "-1164854368" or "-1140649361", -0x4, D)
     gg.clearResults()
     if st_graviq then abc() else cba() end
@@ -552,7 +564,7 @@ end
 
 function shv22()
     st_shv2 = not st_shv2
-    Z.S("4647714816510698455", Q, bor(Cd, O, Ca))
+    Z.S("4647714816510698455", Q, bor(Cd, O, Ca, B))
     Z.W(st_shv2 and "4489188112626352128" or "4489188110482223923", 0x18, Q)
     gg.clearResults()
     if st_shv2 then abc() else cba() end
@@ -563,7 +575,7 @@ function flpp1()
     local p = gg.prompt({"Enter Flip Downward Value:"}, {"7"}, {"number"})
     if not p then return player() end
     local val = tonumber(p[1]) or 7
-    Z.S("4575657250219098112", Q, bor(Ca, O))
+    Z.S("4575657250219098112", Q, bor(Ca, O, B))
     if Result and #Result ~= 0 then 
         local t = {}
         for i,v in ipairs(Result) do t[i] = {address = v.address + 140, flags = F} end
@@ -582,7 +594,7 @@ function flpp()
     local p = gg.prompt({"Enter Flip Upward Value:"}, {"7"}, {"number"})
     if not p then return player() end
     local val = tonumber(p[1]) or 7
-    Z.S("4575657250219098112", Q, bor(Ca, O))
+    Z.S("4575657250219098112", Q, bor(Ca, O, B))
     if Result and #Result ~= 0 then 
         local t = {}
         for i,v in ipairs(Result) do t[i] = {address = v.address + 140, flags = F} end
@@ -678,7 +690,7 @@ menuuuvis = 0
 end
 
 function kosmos()
-    Z.S("-0.00800000038", F, bor(Cd, Ca, O))
+    Z.S("-0.00800000038", F, bor(Cd, Ca, O, B))
     if Result and #Result > 0 then
         gg.editAll("2.5", F)
         gg.sleep(100)
@@ -690,7 +702,7 @@ function kosmos()
 end
 
 function _car_logic(is_on)
-    Z.S("4812096201845506048", Q, bor(Ca, O, Cd))
+    Z.S("4812096201845506048", Q, bor(Ca, O, Cd, B))
     if is_on then
         Z.W("0", 0x1C, D, true)
         Z.W("0", 0x20, D, true)
@@ -718,7 +730,7 @@ end
 
 function shcars()
     st_shcar = not st_shcar
-    Z.S("4575243612898721792", Q, bor(Cd, O))
+    Z.S("4575243612898721792", Q, bor(Cd, O, B))
     Z.W(st_shcar and 2.5 or 0.00001, -0x8, F)
     gg.clearResults()
     if st_shcar then abc() else cba() end
@@ -727,19 +739,19 @@ end
 
 function gmcarq()
     st_gmcarchik = not st_gmcarchik
-    Z.S("4812096201845506048", Q, bor(Ca, Cd, O))
+    Z.S("4812096201845506048", Q, bor(Ca, Cd, O, B))
     Z.W(st_gmcarchik and 999999 or 1000, 0x5DC, F)
     gg.clearResults()
     if st_gmcarchik then abc() else cba() end
     car()
 end
 
-function hpcarq() Z.S("4812096201845506048", Q, bor(Ca, Cd, O)) Z.W(1000, 0x5DC, F) gg.clearResults() abc() car() end
-function breakcar() Z.S("4812096201845506048", Q, bor(Ca, Cd, O)) Z.W(20, 0x5DC, F) gg.clearResults() abc() car() end
+function hpcarq() Z.S("4812096201845506048", Q, bor(Ca, Cd, O, B)) Z.W(1000, 0x5DC, F) gg.clearResults() abc() car() end
+function breakcar() Z.S("4812096201845506048", Q, bor(Ca, Cd, O, B)) Z.W(20, 0x5DC, F) gg.clearResults() abc() car() end
 
 function gidra()
     st_gidraa = not st_gidraa
-    Z.S("-4647714812178464768", Q, bor(Cd, O, Ca))
+    Z.S("-4647714812178464768", Q, bor(Cd, O, Ca, B))
     Z.W(st_gidraa and 655361 or -16777215, 0x160, D, false)
     gg.clearResults()
     if st_gidraa then abc() else cba() end
@@ -749,7 +761,7 @@ end
 function nitrolol()
     st_nitr = not st_nitr
     gg.clearList()
-    Z.S("-4647714812178464768", Q, bor(Cd, O, Ca))
+    Z.S("-4647714812178464768", Q, bor(Cd, O, Ca, B))
     Z.W(st_nitr and 24772608 or 24772608, 0x2C, D, st_nitr)
     Z.W(st_nitr and -2145353216 or -2145353216, 0x634, D, st_nitr)
     if not st_nitr then gg.clearList() end
@@ -760,7 +772,7 @@ end
 
 function carupmotor()
     st_upmotor = not st_upmotor
-    Z.S("4812096201845506048", Q, bor(Ca, O, Cd))
+    Z.S("4812096201845506048", Q, bor(Ca, O, Cd, B))
     Z.W(st_upmotor and -0.00179999997 or 0.0013, 0x64, F)
     gg.clearResults()
     if st_upmotor then abc() else cba() end
@@ -768,7 +780,7 @@ function carupmotor()
 end
 
 function carup11()
-    Z.S("-0.00800000038", F, bor(Cd, O, Ca))
+    Z.S("-0.00800000038", F, bor(Cd, O, Ca, B))
     gg.editAll("1.0", F)
     gg.setVisible(false) 
     gg.sleep(100)
@@ -779,7 +791,7 @@ end
 
 function mopedsh()
     st_mopsh = not st_mopsh
-    Z.S(st_mopsh and "4539628425391341620" or "4539628427538825268", Q, bor(Ca, O, Cd))
+    Z.S(st_mopsh and "4539628425391341620" or "4539628427538825268", Q, bor(Ca, O, Cd, B))
     gg.editAll(st_mopsh and "4539628427538825268" or "4539628425391341620", Q)
     gg.clearResults()
     if st_mopsh then 
@@ -830,7 +842,7 @@ end
 
 function chamsw()
     st_chamsiwhite = not st_chamsiwhite
-    Z.S("1132462073", Q, bor(Cd, O))
+    Z.S("1132462073", Q, bor(Cd, O, B))
     Z.W(st_chamsiwhite and 1.999111188 or 0.00392156886, -4, F)
     gg.clearResults()
     if st_chamsiwhite then abc() else cba() end
@@ -839,7 +851,7 @@ end
 
 function chamsr()
     st_chamsired = not st_chamsired
-    Z.S("1132462073", Q, bor(Cd, O))
+    Z.S("1132462073", Q, bor(Cd, O, B))
     Z.W(st_chamsired and -1.999111188 or 0.00392156886, -4, F)
     gg.clearResults()
     if st_chamsired then abc() else cba() end
@@ -848,7 +860,7 @@ end
 
 function fov()
     st_fovv = not st_fovv
-    Z.S("4252262742350898174", Q, bor(Cd, O))
+    Z.S("4252262742350898174", Q, bor(Cd, O, B))
     Z.W(st_fovv and "90" or "70", 0xC, F)
     gg.clearResults()
     if st_fovv then abc() else cba() end
@@ -857,7 +869,7 @@ end
 
 function ulfov()
     st_ulfovq = not st_ulfovq
-    Z.S("4252262742350898174", Q, bor(Cd, O))
+    Z.S("4252262742350898174", Q, bor(Cd, O, B))
     Z.W(st_ulfovq and "110" or "70", 0xC, F)
     gg.clearResults()
     if st_ulfovq then abc() else cba() end
@@ -866,7 +878,7 @@ end
 
 function esphack()
     st_esplol = not st_esplol
-    Z.S("5638878673340727297", Q, bor(A, O))
+    Z.S("5638878673340727297", Q, bor(A, O, B))
     Z.W(st_esplol and "199.90909090909" or "30.0101010101", -60, F)
     Z.W(st_esplol and "199.90909090909" or "30.0101010101", -56, F)
     gg.clearResults()
@@ -876,7 +888,7 @@ end
 
 function inviswall()
     st_invwal = not st_invwal
-    Z.S("77190601328179", F, bor(Xa, O, Cd))
+    Z.S("77190601328179", F, bor(Xa, O, Cd, B))
     Z.W(st_invwal and -4.99384990408 or 0.90375937, 0x14, F)
     gg.clearResults()
     if st_invwal then abc() else cba() end
@@ -889,7 +901,7 @@ function channick()
     local i2 = gg.prompt({"Enter Target Nickname:"}, {"Nick_Name"}, {"text"})
     if not i2 then return visualy() end 
     gg.clearResults()
-    gg.setRanges(bor(Jh, A))
+    gg.setRanges(bor(Jh, A, B))
     gg.searchNumber(":"..i1[1], 4)
     if gg.getResultCount() > 0 then 
         gg.getResults(99999) 
@@ -908,7 +920,7 @@ function chanlog()
     local i2 = gg.prompt({"Enter Target Login ID:"}, {"Login"}, {"text"})
     if not i2 then return visualy() end 
     gg.clearResults()
-    gg.setRanges(bor(Jh, A))
+    gg.setRanges(bor(Jh, A, B))
     gg.searchNumber(":"..i1[1], 4)
     if gg.getResultCount() > 0 then 
         gg.getResults(99999) 
@@ -969,7 +981,7 @@ function rapidik()
     local p = gg.prompt({"Select Speed Multiplier [0.3 - 0.9]"}, nil, {"number"})
     if not p then return gun() end
     
-    Z.S("4584664420663165927", Q, bor(Ca, O, Cd))
+    Z.S("4584664420663165927", Q, bor(Ca, O, Cd, B))
     if Result and #Result > 0 then
         local offs = {16, 28, 240, 252}
         for _, o in ipairs(offs) do 
@@ -990,12 +1002,12 @@ function shlool()
         local p = gg.prompt({"Enter Speed Range [1 - 100]"}, nil, {"number"})
         if not p then st_shshq = false return gun() end
         
-        Z.S("4584664420663165927", Q, bor(Ca, O, Cd))
+        Z.S("4584664420663165927", Q, bor(Ca, O, Cd, B))
         Z.W(p[1], 8, F)
         Z.W(p[1], 232, F)
         abc()
     else
-        Z.S("4584664420663165927", Q, bor(Ca, O, Cd))
+        Z.S("4584664420663165927", Q, bor(Ca, O, Cd, B))
         Z.W(1.2, 8, F)
         Z.W(1.2, 232, F)
         cba()
@@ -1007,7 +1019,7 @@ end
 function scat()
     st_sc = not st_sc
     local _o, _m = "1120403456", "1119748096"
-    Z.S(st_sc and _o or _m, D, bor(Ca, O, Cd))
+    Z.S(st_sc and _o or _m, D, bor(Ca, O, Cd, B))
     if Result and #Result ~= 0 then 
         gg.editAll(st_sc and _m or _o, D)
         if st_sc then abc() else cba() end
@@ -1021,7 +1033,7 @@ end
 function farmsk()
     st_fsk = not st_fsk
     local _o, _m = "4489188110487257088", "4489188110535131456"
-    Z.S(st_fsk and _o or _m, Q, bor(Ca, O, Cd))
+    Z.S(st_fsk and _o or _m, Q, bor(Ca, O, Cd, B))
     if Result and #Result ~= 0 then 
         gg.editAll(st_fsk and _m or _o, Q)
         if st_fsk then abc() else cba() end
@@ -1035,7 +1047,7 @@ end
 function avtoq()
     st_avty = not st_avty
     local _o, _m = "4489188110487257088", "4489188110489300000"
-    Z.S(st_avty and _o or _m, Q, bor(Ca, O, Cd))
+    Z.S(st_avty and _o or _m, Q, bor(Ca, O, Cd, B))
     if Result and #Result ~= 0 then 
         gg.editAll(st_avty and _m or _o, Q)
         if st_avty then abc() else cba() end
@@ -1049,7 +1061,7 @@ end
 function scor2()
     st_alertr = not st_alertr
     local _o, _m = "4489188110487257088", "4489188110516131456"
-    Z.S(st_alertr and _o or _m, Q, bor(Ca, O, Cd))
+    Z.S(st_alertr and _o or _m, Q, bor(Ca, O, Cd, B))
     if Result and #Result ~= 0 then 
         gg.editAll(st_alertr and _m or _o, Q)
         if st_alertr then abc() else cba() end
@@ -1529,7 +1541,7 @@ function teleportByMarker()
     local C, M = {}, {}
     for _, q in ipairs({"13950255104", "5360320512"}) do
       if #C == 0 then
-        Z.S(q, Q, O)
+        Z.S(q, Q, bor(O, B, A))
         if Result then
           for _, v in ipairs(Result) do
             local c = gV({{address = v.address + 32, flags = F}, {address = v.address + 36, flags = F}, {address = v.address + 40, flags = F}, {address = v.address + 48, flags = F}})
@@ -1560,7 +1572,7 @@ function teleportByMarker()
       return tpMenu()
     elseif s == #M - 1 then
     else
-      Z.S("4575657250219098112", Q, bor(Ca, O))
+      Z.S("4575657250219098112", Q, bor(Ca, O, B))
       if Result and #Result > 0 then
         local t = {}
         for i, v in ipairs(Result) do t[i] = {address = v.address + 140, flags = F} end
@@ -1607,7 +1619,7 @@ function savePoints()
 end
 
 function getCurrentCoords()
-    Z.S("4575657250219098112", Q, bor(Ca, O))
+    Z.S("4575657250219098112", Q, bor(Ca, O, B))
     if not Result or #Result == 0 then
         showError()
         return nil
@@ -1661,7 +1673,7 @@ function managePointsMenu()
         viewSavedPoints()
         
     elseif choice == 4 then
-        if gg.alert("🗑️ Delete all saved locations permanently?", "YES", "NO") == 1 then
+        if gg.alert("🗑️️ Delete all saved locations permanently?", "YES", "NO") == 1 then
             savedPoints = {}
             savePoints()
             toast.success("🗑️ ALL POINTS CLEARED")
@@ -1706,7 +1718,7 @@ end
 
 local publicPlaces = {
     {name = '🏫 Driving School', x = 486, y = 2276, z = 12},
-    {name = '🏛️ Military Base Gate', x = 1915, y = 2302, z = 15},
+    {name = '🏛️️ Military Base Gate', x = 1915, y = 2302, z = 15},
     {name = '🏦 Yuzhny Bank', x = 2372, y = -2142, z = 23},
     {name = '🏦 Bank Arzamas', x = -143, y = 593, z = 12},
     {name = '🏦 Bank Batyrevo', x = 1850, y = 2042, z = 16},
@@ -1775,7 +1787,6 @@ local criminal = {
     {name = '🖤 Black Market', x = -2249, y = 245, z = 24.5},
     {name = '⚔️ Bizzwar Zone Sawmill', x = -1043.95, y = -2464.63, z = 28.48}
 }
-
 
 local starterJobs = {
     {name = '🏭  Factory #1 ', x = -2547, y = 534, z = 9},
