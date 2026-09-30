@@ -51,7 +51,7 @@ end
 -- ---------------------------------------------------
 gg.toast("⚡ [HERRY HACKS] Verifying Access...")
 
-local input = gg.prompt({'🔑 Enter Your VIP Access Key:'}, {[1]=''}, {[1]='text'})
+local input = gg.prompt({'🔑 Enter Your VIP Access Key:'}, {[1] = ''}, {[1] = 'text'})
 if not input or cleanStr(input[1]) == '' then
     gg.alert("❌ Access Denied: Key cannot be empty!")
     os.exit()
@@ -76,11 +76,10 @@ else
     local currentMs = currentSec * 1000
 
     for line in content:gmatch("[^\r\n]+") do
-        local cleanedLine = cleanStr(line)
-        if cleanedLine ~= "" then
-            -- Parse pipeline (|) split entries
+        local rawLine = line:gsub("\r", "")
+        if rawLine ~= "" then
             local parts = {}
-            for part in line:gmatch("[^|]+") do
+            for part in rawLine:gmatch("[^|]+") do
                 table.insert(parts, cleanStr(part))
             end
 
@@ -103,7 +102,7 @@ else
                         isValidKey = true
                     end
                 else
-                    -- If no valid timestamp, treat key as active
+                    -- Expiry format nahi mila toh permanently active key mano
                     isValidKey = true
                 end
                 break
@@ -149,10 +148,8 @@ function LOAD_POSYA_RUSSIAN()
             local success, runErr = pcall(runPosya)
             if not success and runErr then
                 local errStr = tostring(runErr)
-                if not errStr:find("os.exit") and not errStr:find("called os.exit") then
+                if not errStr:find("os.exit") then
                     gg.alert("❌ Runtime Error in PosyaByHerry.lua:\n" .. errStr)
-                else
-                    os.exit()
                 end
             end
         else
@@ -173,7 +170,7 @@ function LOAD_POSYA_ENGLISH()
 
     if content and #content > 10 then
         if content:find("<!DOCTYPE html>") or content:find("<html>") or content:find("404: Not Found") then
-            gg.alert("❌ RAW Link Error!\n\nMake sure 'Herry-Script' Repository is PUBLIC and file 'English.lua' exists.")
+            gg.alert("❌ RAW Link Error!\n\nMake sure 'Herry-Script' Repository is PUBLIC and file 'EnglishPosya.lua' exists.")
             return
         end
 
@@ -182,17 +179,15 @@ function LOAD_POSYA_ENGLISH()
             local success, runErr = pcall(runPosya)
             if not success and runErr then
                 local errStr = tostring(runErr)
-                if not errStr:find("os.exit") and not errStr:find("called os.exit") then
-                    gg.alert("❌ Runtime Error in English.lua:\n" .. errStr)
-                else
-                    os.exit()
+                if not errStr:find("os.exit") then
+                    gg.alert("❌ Runtime Error in EnglishPosya.lua:\n" .. errStr)
                 end
             end
         else
-            gg.alert("❌ Syntax Error in English.lua:\n" .. tostring(err))
+            gg.alert("❌ Syntax Error in EnglishPosya.lua:\n" .. tostring(err))
         end
     else
-        gg.alert("❌ Failed to download English.lua from GitHub!\nCheck Virtual Space Internet access.")
+        gg.alert("❌ Failed to download EnglishPosya.lua from GitHub!\nCheck Virtual Space Internet access.")
     end
 end
 
@@ -225,6 +220,9 @@ function MAIN_MENU()
         os.exit()
     end
 end
+
+-- Initial execution logic fix
+MAIN_MENU()
 
 while true do
     if gg.isVisible(true) then
