@@ -137,8 +137,8 @@ gg.alert("━━━━━━━━━━━━━━━━━━━━━━━�
          "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" ..
          "👤 Developer: Herry\n" ..
          "💬 Discord: herry_escobarr\n" ..
-         "🚀 Version: Universal Android Edition\n" ..
-        "in some Days Script going to Close Pearment Due to New Mod menu hack"
+         "🚀 Script Update: Script Going to Close permanent Contact Owner for Information In discord Use this temporarily" ..
+       
 
 "━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 
